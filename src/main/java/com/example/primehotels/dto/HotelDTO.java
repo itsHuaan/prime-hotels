@@ -17,6 +17,7 @@ public class HotelDTO {
     private int roomAvailable;
     private String image;
     private double price;
+    private int discount = 0;
     private double rating;
     private boolean status;
     private int facilityListId;

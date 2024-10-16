@@ -1,10 +1,10 @@
-package com.example.primehotels.service;
+package com.example.primehotels.repository;
 
 import com.example.primehotels.util.ApiResponse;
 
 import java.util.List;
 
-public interface IBaseService<T, U> {
+public interface IBaseRepository<T, U> {
     List<T> getAll();
     T getById(U id);
     U save(T t);
