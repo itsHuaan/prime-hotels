@@ -8,20 +8,12 @@
     </title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="css/style.css">
     <script src="js/script.js"></script>
-
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-<div class="header">
-    <h1>
-        Prime Hotels
-    </h1>
-    <a class="login" href="#">
-        Login
-    </a>
-</div>
+<jsp:include page="components/header.jsp"/>
 <div class="hero">
     <h2>
         Experience The Difference
@@ -122,19 +114,8 @@
         </i>
     </div>
 </div>
-<div class="footer">
-    <div class="social-icons">
-        <i class="fab fa-instagram">
-        </i>
-        <i class="fab fa-facebook">
-        </i>
-        <i class="fab fa-twitter">
-        </i>
-    </div>
-    <p>
-        ©All Right Reserved
-    </p>
-</div>
+
+<jsp:include page="components/footer.jsp"/>
 </body>
 
 </html>

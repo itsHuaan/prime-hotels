@@ -3,28 +3,6 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-.header {
-    background-color: #000;
-    color: #fff;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 24px;
-}
-
-.header .login {
-    border: 1px solid #fff;
-    padding: 5px 15px;
-    border-radius: 20px;
-    text-decoration: none;
-    color: #fff;
-}
-
 .hero {
     background-image: url('https://picsum.photos/1920/1080');
     background-size: cover;
@@ -138,7 +116,7 @@ hr {
 
 .locations .location-card img {
     width: 100%;
-    height: auto;
+    height: 100%;
 }
 
 .locations .location-card p {
