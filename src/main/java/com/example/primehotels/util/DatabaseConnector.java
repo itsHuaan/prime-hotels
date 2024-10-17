@@ -9,7 +9,7 @@ public class DatabaseConnector {
 
     public Connection openConnection() throws SQLException {
         try {
-            String dbName = "classicmodels";
+            String dbName = "primehotels";
             String dbUsername = "root";
             String dbPassword = "";
             String url = "jdbc:mysql://localhost:3306/" + dbName + "?useSSL=false";

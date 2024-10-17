@@ -6,17 +6,18 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
     <title>
         Prime Hotels
     </title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
+            margin-top: 90px;
             padding: 0;
             background-color: #f5f5f5;
         }
@@ -166,6 +167,7 @@
 </head>
 
 <body>
+<jsp:include page="components/header.jsp"/>
 <div class="sort-by">
         <span>
             Sort By:
@@ -178,118 +180,40 @@
     </button>
 </div>
 <div class="hotel-list">
-    <div class="hotel">
-        <img alt="Hotel Serene Stay room image" height="150"
-             src="https://storage.googleapis.com/a1aa/image/VfvRFRq5pk2jZaanuVXurnQeGh21wWz1KGTlKYWwZve1aYOnA.jpg"
-             width="150">
-        <div class="hotel-details">
-            <h2>Hotel Serene Stay</h2>
-            <p>2464 Royal Ln. Mesa, New Jersey 45463</p>
-            <p class="rating">⭐ 4.4 (91 reviews)</p>
-            <div class="amenities">
-                <span><i class="fas fa-check-circle"></i> Room Service</span>
-                <span><i class="fas fa-check-circle"></i> Restaurant</span>
-                <span><i class="fas fa-check-circle"></i> Spa</span>
-                <span><i class="fas fa-check-circle"></i> Parking</span>
-            </div>
-            <div class="hotel-price">
-                <div class="price-discount">
-                    <div class="price-line">
-                        <span class="current-price">$59</span>
-                        <span class="original-price">$1299</span>
-                        <span class="discount">93% OFF</span>
-                    </div>
-                    <p class="per-night">per night/room</p>
+    <c:forEach var="item" items="${hotels}">
+        <div class="hotel">
+            <img alt="" height="150"
+                 src="https://picsum.photos/1440/1440?random=${item.hotelId}"
+                 width="150">
+            <div class="hotel-details">
+                <h2>${item.name}</h2>
+                <p>${item.address}</p>
+                <p class="rating">
+                    <i class="fas fa-star"></i>
+                        ${item.rating}
+                </p>
+                <div class="amenities">
+                    <span><i class="fas fa-check-circle"></i> Room Service</span>
+                    <span><i class="fas fa-check-circle"></i> Restaurant</span>
+                    <span><i class="fas fa-check-circle"></i> Spa</span>
+                    <span><i class="fas fa-check-circle"></i> Parking</span>
                 </div>
-                <button>View More Details</button>
+                <div class="hotel-price">
+                    <div class="price-discount">
+                        <div class="price-line">
+                            <span class="current-price">$${item.price - (item.price * (item.discount/100))}</span>
+                            <span class="original-price">$${item.price}</span>
+                            <span class="discount">${item.discount}% OFF</span>
+                        </div>
+                        <p class="per-night">per night/room</p>
+                    </div>
+                    <a href="BookingServlet?hotelId=${item.hotelId}">
+                        <button>View More Details</button>
+                    </a>
+                </div>
             </div>
         </div>
-
-    </div>
-    <div class="hotel">
-        <img alt="Hotel Serene Stay room image" height="150"
-             src="https://storage.googleapis.com/a1aa/image/VfvRFRq5pk2jZaanuVXurnQeGh21wWz1KGTlKYWwZve1aYOnA.jpg"
-             width="150">
-        <div class="hotel-details">
-            <h2>Hotel Serene Stay</h2>
-            <p>2464 Royal Ln. Mesa, New Jersey 45463</p>
-            <p class="rating">⭐ 4.4 (91 reviews)</p>
-            <div class="amenities">
-                <span><i class="fas fa-check-circle"></i> Room Service</span>
-                <span><i class="fas fa-check-circle"></i> Restaurant</span>
-                <span><i class="fas fa-check-circle"></i> Spa</span>
-                <span><i class="fas fa-check-circle"></i> Parking</span>
-            </div>
-            <div class="hotel-price">
-                <div class="price-discount">
-                    <div class="price-line">
-                        <span class="current-price">$59</span>
-                        <span class="original-price">$1299</span>
-                        <span class="discount">93% OFF</span>
-                    </div>
-                    <p class="per-night">per night/room</p>
-                </div>
-                <button>View More Details</button>
-            </div>
-        </div>
-
-    </div>
-    <div class="hotel">
-        <img alt="Hotel Serene Stay room image" height="150"
-             src="https://storage.googleapis.com/a1aa/image/VfvRFRq5pk2jZaanuVXurnQeGh21wWz1KGTlKYWwZve1aYOnA.jpg"
-             width="150">
-        <div class="hotel-details">
-            <h2>Hotel Serene Stay</h2>
-            <p>2464 Royal Ln. Mesa, New Jersey 45463</p>
-            <p class="rating">⭐ 4.4 (91 reviews)</p>
-            <div class="amenities">
-                <span><i class="fas fa-check-circle"></i> Room Service</span>
-                <span><i class="fas fa-check-circle"></i> Restaurant</span>
-                <span><i class="fas fa-check-circle"></i> Spa</span>
-                <span><i class="fas fa-check-circle"></i> Parking</span>
-            </div>
-            <div class="hotel-price">
-                <div class="price-discount">
-                    <div class="price-line">
-                        <span class="current-price">$59</span>
-                        <span class="original-price">$1299</span>
-                        <span class="discount">93% OFF</span>
-                    </div>
-                    <p class="per-night">per night/room</p>
-                </div>
-                <button>View More Details</button>
-            </div>
-        </div>
-
-    </div>
-    <div class="hotel">
-        <img alt="Hotel Serene Stay room image" height="150"
-             src="https://storage.googleapis.com/a1aa/image/VfvRFRq5pk2jZaanuVXurnQeGh21wWz1KGTlKYWwZve1aYOnA.jpg"
-             width="150">
-        <div class="hotel-details">
-            <h2>Hotel Serene Stay</h2>
-            <p>2464 Royal Ln. Mesa, New Jersey 45463</p>
-            <p class="rating">⭐ 4.4 (91 reviews)</p>
-            <div class="amenities">
-                <span><i class="fas fa-check-circle"></i> Room Service</span>
-                <span><i class="fas fa-check-circle"></i> Restaurant</span>
-                <span><i class="fas fa-check-circle"></i> Spa</span>
-                <span><i class="fas fa-check-circle"></i> Parking</span>
-            </div>
-            <div class="hotel-price">
-                <div class="price-discount">
-                    <div class="price-line">
-                        <span class="current-price">$59</span>
-                        <span class="original-price">$1299</span>
-                        <span class="discount">93% OFF</span>
-                    </div>
-                    <p class="per-night">per night/room</p>
-                </div>
-                <button>View More Details</button>
-            </div>
-        </div>
-
-    </div>
+    </c:forEach>
 </div>
 </body>
 

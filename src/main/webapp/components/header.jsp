@@ -14,18 +14,29 @@
         .header {
             background-color: #000;
             color: #fff;
-            padding: 20px;
+            padding: 20px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: inherit;
         }
 
         .header h1 {
-            margin: 0;
+            margin: 0 20px;
             font-size: 24px;
         }
 
         .header .login {
+            margin: 0 20px;
             border: 1px solid #fff;
             padding: 5px 15px;
             border-radius: 20px;
@@ -35,15 +46,15 @@
     </style>
 </head>
 <body>
-<header>
-    <div class="header">
+<div class="header">
+    <a href="HomepageServlet">
         <h1>
             Prime Hotels
         </h1>
-        <a class="login" href="login.jsp">
-            Login
-        </a>
-    </div>
-</header>
+    </a>
+    <a class="login" href="login.jsp">
+        Login
+    </a>
+</div>
 </body>
 </html>

@@ -3,7 +3,9 @@ package com.example.primehotels.mapper;
 import com.example.primehotels.dto.HotelDTO;
 import com.example.primehotels.entity.HotelEntity;
 import com.example.primehotels.model.HotelModel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class HotelMapper {
     public HotelDTO toDTO(HotelEntity hotelEntity) {
         return HotelDTO.builder()

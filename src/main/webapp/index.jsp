@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -10,6 +11,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
     <script src="js/script.js"></script>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            transition: width 0.2s, height 0.2s;
+        }
+
+        .location-cards:hover::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+    </style>
 </head>
 
 <body>
@@ -22,12 +39,23 @@
         Plan.Book.Travel
     </p>
     <div class="search-bar">
-        <input placeholder="Current Location" type="text"/>
-        <input placeholder="Check-in Date" type="date"/>
-        <input placeholder="Check-out Date" type="date"/>
-        <button>
-            Search Hotels
-        </button>
+        <div class="button location-button dropdown">
+            <i class="fas fa-location-arrow"></i>
+            <span id="dropdownText">Current Location</span>
+            <div class="dropdown-content">
+                <c:forEach var="item" items="${locations}">
+                    <a href="#" onclick="setDropdownValue('${item.name}')">${item.name}</a>
+                </c:forEach>
+            </div>
+        </div>
+        <div class="button date-button">
+            <i class="fas fa-calendar-alt"></i>
+            <span>01 March - 05 March</span>
+        </div>
+        <div class="button search-button">
+            <i class="fas fa-search"></i>
+            <span>Search Hotels</span>
+        </div>
     </div>
 </div>
 <div class="member-section">
@@ -54,30 +82,18 @@
         Our Locations
     </h3>
     <div class="location-cards">
-        <div class="location-card">
-            <img alt="New York hotel room" height="200"
-                 src="https://picsum.photos/1080/1440"
-                 width="100"/>
-            <p>
-                New York
-            </p>
-        </div>
-        <div class="location-card">
-            <img alt="Paris hotel room" height="200"
-                 src="https://picsum.photos/1080/1440"
-                 width="100"/>
-            <p>
-                Paris
-            </p>
-        </div>
-        <div class="location-card">
-            <img alt="London hotel room" height="200"
-                 src="https://picsum.photos/1080/1440"
-                 width="100"/>
-            <p>
-                London
-            </p>
-        </div>
+        <c:forEach var="item" items="${locations}">
+            <div class="location-card">
+                <a href="HotelListServlet?locationId=${item.locationId}">
+                    <img alt="" height="200"
+                         src="https://picsum.photos/1080/1440?random=${item.locationId}"
+                         width="100"/>
+                    <p>
+                            ${item.name}
+                    </p>
+                </a>
+            </div>
+        </c:forEach>
     </div>
 </div>
 <hr>
@@ -116,6 +132,30 @@
 </div>
 
 <jsp:include page="components/footer.jsp"/>
+<script>
+    function setDropdownValue(value) {
+        document.getElementById("dropdownText").innerText = value;
+        const dropdownContent = document.querySelector('.dropdown-content');
+        dropdownContent.style.display = 'none';
+    }
+
+    document.querySelector('.dropdown').addEventListener('mouseenter', function () {
+        document.querySelector('.dropdown-content').style.display = 'block';
+    });
+
+    document.querySelector('.dropdown').addEventListener('mouseleave', function () {
+        document.querySelector('.dropdown-content').style.display = 'none';
+    });
+
+    const subDropdown = document.querySelector('.sub-dropdown');
+    subDropdown.addEventListener('mouseenter', function () {
+        this.querySelector('.sub-dropdown-content').style.display = 'block';
+    });
+
+    subDropdown.addEventListener('mouseleave', function () {
+        this.querySelector('.sub-dropdown-content').style.display = 'none';
+    });
+</script>
 </body>
 
 </html>

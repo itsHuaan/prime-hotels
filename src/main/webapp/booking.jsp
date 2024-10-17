@@ -6,11 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
     <title>Booking</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,6 +22,16 @@
 
         hr {
             margin: 2em 0;
+        }
+
+        .price-details input:focus{
+            outline: none;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .container {
@@ -74,10 +85,12 @@
 
         .images .main-image {
             flex: 2;
+            max-height: 30vw;
         }
 
         .images .side-images {
             flex: 1;
+            max-height: 15vw;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -122,6 +135,7 @@
 
         .pricing {
             flex: 1;
+            /* Allows pricing to grow */
             background-color: #fff;
             border-radius: 10px;
             padding: 20px;
@@ -143,10 +157,6 @@
         .pricing .price-details div {
             flex: 1;
             text-align: center;
-        }
-
-        .pricing .price-details div:not(:last-child) {
-            border-right: 1px solid #ddd;
         }
 
         .pricing .reserve-button {
@@ -335,75 +345,78 @@
 </head>
 
 <body>
+
+<c:set var="discountedPrice" value="${hotel.price - (hotel.price * (hotel.discount / 100))}"/>
 <div class="container">
     <div class="header">
         <div>
-            <h1>Hotel MountainView</h1>
-            <p>2972 Westheimer Rd. Santa Ana, Illinois 85486</p>
+            <h1>${hotel.name}</h1>
+            <p>${hotel.address}</p>
         </div>
         <div class="rating">
             <i class="fas fa-star"></i>
-            <span>4.7 (95 reviews)</span>
+            <span>${hotel.rating}</span>
         </div>
     </div>
     <div class="images">
         <div class="main-image">
-            <img alt="A cozy hotel room with a large bed, wooden furniture, and a large window with a view of a garden."
+            <img alt=""
                  height="400"
-                 src="https://storage.googleapis.com/a1aa/image/IoTPMsvtgAarEJkicSDmNkShchnQqUkRZSH4IxbMV0DRV05E.jpg"
-                 width="600" />
+                 src="https://picsum.photos/1920/1080?random=1"
+                 width="600"/>
         </div>
         <div class="side-images">
-            <img alt="A close-up of a hotel bed with white linens and a nightstand with books and a water carton."
+            <img alt=""
                  height="200"
-                 src="https://storage.googleapis.com/a1aa/image/IzEpdAxIOqYpNZ8B8RSRdjA5Qq7VBuvlgAuevwfG9qdBVRnTA.jpg"
-                 width="300" />
-            <img alt="A night view of a hotel building with the word 'HOTEL' illuminated." height="200"
-                 src="https://storage.googleapis.com/a1aa/image/OcVpIyYt0WYHP9ZfqcNLEMjrL3Mv1jkYwZDDFDZ5bqmhqozJA.jpg"
-                 width="300" />
+                 src="https://picsum.photos/1920/1080?random=2"
+                 width="300"/>
+            <img alt="" height="200"
+                 src="https://picsum.photos/1920/1080?random=3"
+                 width="300"/>
         </div>
     </div>
     <div class="facilities-pricing">
         <div class="facilities">
             <h2>Facilities</h2>
             <ul>
-                <li><i class="fas fa-check-circle"></i>Reception</li>
-                <li><i class="fas fa-check-circle"></i>Restaurant</li>
-                <li><i class="fas fa-check-circle"></i>TV &amp; Refrigerator</li>
-                <li><i class="fas fa-check-circle"></i>Room Service</li>
-                <li><i class="fas fa-check-circle"></i>24-hour front desk</li>
-                <li><i class="fas fa-check-circle"></i>Parking</li>
+                <c:forEach var="item" items="${facilities}">
+                    <li><i class="fas fa-check-circle"></i> ${item}</li>
+                </c:forEach>
             </ul>
         </div>
         <div class="pricing">
-            <h2>$99 per night</h2>
+            <h2>$${hotel.price - (hotel.price * (hotel.discount/100))} per night</h2>
             <div class="price-details">
                 <div>
                     <p>CHECK-IN</p>
-                    <p>01/01/2023</p>
+                    <input type="date" id="checkin" value="2023-01-01"
+                           style="border: none; background: none; text-align: center; padding: 0; font-size: 1rem; color: inherit; margin-bottom: 10px;"/>
                 </div>
                 <div>
                     <p>CHECK-OUT</p>
-                    <p>05/01/2023</p>
+                    <input type="date" id="checkout" value="2023-01-05"
+                           style="border: none; background: none; text-align: center; padding: 0; font-size: 1rem; color: inherit; margin-bottom: 10px;"/>
                 </div>
-                <div>
+                <div style="text-align: center;">
                     <p>GUESTS</p>
-                    <p>2 guest</p>
+                    <input type="number" id="guests" value="2" min="1"
+                           style="border: none; background: none; text-align: center; padding: 0; font-size: 1rem; color: inherit; width: 50px; margin-bottom: 10px;"/>
                 </div>
             </div>
             <a class="reserve-button" href="#">Reserve</a>
             <p style="text-align: center; color: #666; margin-top: 10px;">Click above to proceed</p>
             <div class="total">
-                <p>$99 * 5 nights</p>
-                <p>$495</p>
+                <p>$${discountedPrice} * 5 nights</p>
+                <p>$${discountedPrice * 5}</p>
             </div>
             <div class="total">
                 <p>Tax and Hospitality fees (10%)</p>
-                <p>$49.5</p>
+                <p>$${(discountedPrice * 5) * 0.1}</p>
             </div>
             <div class="total">
                 <p>Total price after tax</p>
-                <p>$545</p>
+                <p>
+                    $${((discountedPrice * 5) * 0.1)+(discountedPrice * 5)}</p>
             </div>
         </div>
     </div>
@@ -457,7 +470,8 @@
                 <div class="date">2 Days Ago</div>
                 <div class="text">Lorem ipsum dolor sit amet consectetur. Nulla nibh sed lectus aliquet. Posuere
                     orci turpis
-                    dui tincidunt sodales dui.</div>
+                    dui tincidunt sodales dui.
+                </div>
             </div>
         </div>
         <div class="review">
@@ -467,7 +481,8 @@
                 <div class="date">2 Days Ago</div>
                 <div class="text">Lorem ipsum dolor sit amet consectetur. Nulla nibh sed lectus aliquet. Posuere
                     orci turpis
-                    dui tincidunt sodales dui.</div>
+                    dui tincidunt sodales dui.
+                </div>
             </div>
         </div>
         <div class="review">
@@ -477,7 +492,8 @@
                 <div class="date">2 Days Ago</div>
                 <div class="text">Lorem ipsum dolor sit amet consectetur. Nulla nibh sed lectus aliquet. Posuere
                     orci turpis
-                    dui tincidunt sodales dui.</div>
+                    dui tincidunt sodales dui.
+                </div>
             </div>
         </div>
         <div class="review">
@@ -487,7 +503,8 @@
                 <div class="date">2 Days Ago</div>
                 <div class="text">Lorem ipsum dolor sit amet consectetur. Nulla nibh sed lectus aliquet. Posuere
                     orci turpis
-                    dui tincidunt sodales dui.</div>
+                    dui tincidunt sodales dui.
+                </div>
             </div>
         </div>
     </div>
