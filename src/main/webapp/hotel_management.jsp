@@ -6,9 +6,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Hotel management</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -43,15 +45,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td>jhon@email.com</td>
-                                <td>USA</td>
-                                <td>123</td>
-                                <td>Member</td>
-                            </tr>
+                            <c:forEach var="item" items="${hotels}">
+                                <tr>
+                                    <th scope="row">${item.hotelId}</th>
+                                    <td>${item.name}</td>
+                                    <td>${item.address}</td>
+                                    <td>${item.description}</td>
+                                    <td>${item.roomAvailable}</td>
+                                    <td>${item.price}</td>
+                                    <td>${item.status}</td>
+                                </tr>
+                            </c:forEach>
                             </tbody>
                         </table>
                     </div>

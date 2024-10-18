@@ -45,7 +45,7 @@
             <%--                    <a href="blank.html" class="dropdown-item">Blank Page</a>--%>
             <%--                </div>--%>
             <%--            </div>--%>
-            <a href="../index.jsp" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+            <a href="dashboard.jsp" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
             <a href="HotelManagementServlet" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Hotel
                 managament</a>
         </div>
