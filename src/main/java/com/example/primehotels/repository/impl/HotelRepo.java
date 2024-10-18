@@ -93,8 +93,8 @@ public class HotelRepo implements IHotelRepo {
     }
 
     @Override
-    public String save(HotelEntity hotelEntity) {
-        return "";
+    public int save(HotelEntity hotelEntity) {
+        return 0;
     }
 
     @Override

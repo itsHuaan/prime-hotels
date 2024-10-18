@@ -38,7 +38,7 @@ public class LocationService implements ILocationService {
     }
 
     @Override
-    public Integer save(LocationDTO locationDTO) {
+    public int save(LocationDTO locationDTO) {
         return 0;
     }
 

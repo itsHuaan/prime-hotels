@@ -48,7 +48,7 @@ public class LocationRepo implements ILocationRepo {
     }
 
     @Override
-    public Integer save(LocationEntity locationEntity) {
+    public int save(LocationEntity locationEntity) {
         return 0;
     }
 

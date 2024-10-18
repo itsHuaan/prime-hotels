@@ -20,7 +20,6 @@ public class BookingServlet extends HttpServlet {
         String id = request.getParameter("hotelId");
         HotelDTO hotel = hotelService.getById(id);
         List<String> facilities = hotelRepo.getFacilities(id);
-        System.out.println(hotel);
         request.setAttribute("hotel", hotel);
         request.setAttribute("facilities", facilities);
         request.getRequestDispatcher("booking.jsp").forward(request, response);

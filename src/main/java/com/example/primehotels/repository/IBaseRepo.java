@@ -10,8 +10,7 @@ import java.util.List;
 public interface IBaseRepo<T, U> {
     List<T> getAll();
     T getById(U id);
-    U save(T t);
+    int save(T t);
     ApiResponse delete(U id);
-
     T resultSetToEntity(ResultSet resultSet) throws SQLException;
 }

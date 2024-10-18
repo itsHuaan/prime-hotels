@@ -18,5 +18,5 @@ public class ReservationModel {
     private Date checkOut;
     private Date reserveDate;
     private double deposit;
-    private String status;
+    private int status = 1;
 }

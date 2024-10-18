@@ -44,7 +44,7 @@
             <span id="dropdownText">Current Location</span>
             <div class="dropdown-content">
                 <c:forEach var="item" items="${locations}">
-                    <a href="#" onclick="setDropdownValue('${item.name}')">${item.name}</a>
+                    <a href="HotelListServlet?locationId=${item.locationId}" onclick="setDropdownValue('${item.name}')">${item.name}</a>
                 </c:forEach>
             </div>
         </div>

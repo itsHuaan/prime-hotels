@@ -43,8 +43,8 @@ public class HotelService implements IHotelService {
     }
 
     @Override
-    public String save(HotelDTO hotelDTO) {
-        return "";
+    public int save(HotelDTO hotelDTO) {
+        return 0;
     }
 
     @Override

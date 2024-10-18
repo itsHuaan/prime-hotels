@@ -10,18 +10,32 @@
 <html>
 
 <head>
-    <title>Booking</title>
+    <title>${hotel.name}</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            margin: 0;
+            margin: 8vh 0;
             padding: 0;
         }
 
         hr {
             margin: 2em 0;
+        }
+
+        input {
+            border: none;
+            background: none;
+            text-align: end;
+            padding: 0;
+            font-size: 1rem;
+            color: inherit;
+        }
+
+        .price-details input {
+            text-align: center;
+            margin-bottom: 10px;
         }
 
         .price-details input:focus {
@@ -41,32 +55,32 @@
             padding: 20px;
         }
 
-        .header {
+        .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .header h1 {
+        .header-container h1 {
             margin: 0;
             font-size: 24px;
         }
 
-        .header p {
+        .header-container p {
             margin: 0;
             color: #666;
         }
 
-        .header .rating {
+        .header-container .rating {
             display: flex;
             align-items: center;
         }
 
-        .header .rating i {
+        .header-container .rating i {
             color: #f5c518;
         }
 
-        .header .rating span {
+        .header-container .rating span {
             margin-left: 5px;
             color: #666;
         }
@@ -125,7 +139,7 @@
         .facilities ul li {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 30px;
         }
 
         .facilities ul li i {
@@ -134,8 +148,7 @@
         }
 
         .pricing {
-            flex: 1;
-            /* Allows pricing to grow */
+            flex: 2;
             background-color: #fff;
             border-radius: 10px;
             padding: 20px;
@@ -160,6 +173,7 @@
         }
 
         .pricing .reserve-button {
+            font-size: 1.5rem;
             display: block;
             width: 100%;
             background-color: #000;
@@ -169,6 +183,7 @@
             border-radius: 15px;
             text-decoration: none;
             margin-top: 20px;
+            cursor: pointer;
         }
 
         .pricing .total {
@@ -345,10 +360,10 @@
 </head>
 
 <body>
-
+<jsp:include page="components/header.jsp"/>
 <c:set var="discountedPrice" value="${hotel.price - (hotel.price * (hotel.discount / 100))}"/>
 <div class="container">
-    <div class="header">
+    <div class="header-container">
         <div>
             <h1>${hotel.name}</h1>
             <p>${hotel.address}</p>
@@ -386,40 +401,41 @@
         </div>
         <div class="pricing">
             <h2>$<span id="price-display">${hotel.price - (hotel.price * (hotel.discount/100))}</span> per night</h2>
-            <form action="ReserveServlet" method="post">
+            <form action="ReserveServlet?hotelId=${hotel.hotelId}" method="post">
                 <div class="price-details">
                     <div>
                         <p>CHECK-IN</p>
-                        <input type="date" name="checkin" id="checkin" onchange="calculateTotal()"
-                               style="border: none; background: none; text-align: center; padding: 0; font-size: 1rem; color: inherit; margin-bottom: 10px;"/>
+                        <input type="date" name="checkin" id="checkin" onchange="calculateTotal()"/>
                     </div>
                     <div>
                         <p>CHECK-OUT</p>
-                        <input type="date" name="checkout" id="checkout" onchange="calculateTotal()"
-                               style="border: none; background: none; text-align: center; padding: 0; font-size: 1rem; color: inherit; margin-bottom: 10px;"/>
+                        <input type="date" name="checkout" id="checkout" onchange="calculateTotal()"/>
                     </div>
                     <div style="text-align: center;">
                         <p>GUESTS</p>
-                        <input type="number" id="guests" value="1" min="1" onchange="calculateTotal()"
-                               style="border: none; background: none; text-align: center; padding: 0; font-size: 1rem; color: inherit; width: 50px; margin-bottom: 10px;"/>
+                        <input type="number" id="guests" value="1" min="1" onchange="calculateTotal()"/>
                     </div>
                 </div>
-<%--            <a class="reserve-button" href="#">Reserve</a>--%>
                 <button type="submit" class="reserve-button">Reserve</button>
+                <p style="text-align: center; color: #666; margin-top: 10px;">Click above to proceed</p>
+                <div class="total">
+                    <p>Total price for <span id="nights-display">0</span> nights</p>
+                    <p>$<input class="pricing-input" type="number" id="subtotal" name="subtotal" readonly></p>
+                </div>
+                <div class="total">
+                    <p>Tax and Hospitality fees (10%)</p>
+                    <p>$<input class="pricing-input" type="number" id="tax" name="tax" readonly></p>
+                </div>
+                <hr>
+                <div class="total">
+                    <p>Total price after tax</p>
+                    <p>$<input class="pricing-input" type="number" id="total-price" name="total-price" readonly></p>
+                </div>
+                <div class="total">
+                    <p>Deposit (30% of total price)</p>
+                    <p>$<input class="pricing-input" type="number" id="deposit" name="deposit" readonly></p>
+                </div>
             </form>
-            <p style="text-align: center; color: #666; margin-top: 10px;">Click above to proceed</p>
-            <div class="total">
-                <p>Total price for <span id="nights-display">0</span> nights</p>
-                <p>$<span id="subtotal">0</span></p>
-            </div>
-            <div class="total">
-                <p>Tax and Hospitality fees (10%)</p>
-                <p>$<span id="tax">0</span></p>
-            </div>
-            <div class="total">
-                <p>Total price after tax</p>
-                <p>$<span id="total-price">0</span></p>
-            </div>
         </div>
     </div>
     <hr>
@@ -516,26 +532,24 @@
     <hr>
 </div>
 
+<jsp:include page="components/footer.jsp"/>
 <script>
     const hotelPrice = ${hotel.price - (hotel.price * (hotel.discount / 100))};
 
     function calculateTotal() {
         const checkinDate = new Date(document.getElementById("checkin").value);
         const checkoutDate = new Date(document.getElementById("checkout").value);
-
         const timeDifference = checkoutDate - checkinDate;
         const nights = Math.max(0, Math.ceil(timeDifference / (1000 * 60 * 60 * 24)));
-
         document.getElementById("nights-display").innerText = nights;
-
         const subtotal = hotelPrice * nights;
-        document.getElementById("subtotal").innerText = subtotal.toFixed(2);
-
+        document.getElementById("subtotal").value = subtotal.toFixed(2);
         const tax = subtotal * 0.1;
-        document.getElementById("tax").innerText = tax.toFixed(2);
-
+        document.getElementById("tax").value = tax.toFixed(2);
         const totalPrice = subtotal + tax;
-        document.getElementById("total-price").innerText = totalPrice.toFixed(2);
+        document.getElementById("total-price").value = totalPrice.toFixed(2);
+        const deposit = totalPrice * 0.3;
+        document.getElementById('deposit').value = deposit.toFixed(2);
     }
 
     calculateTotal();
@@ -548,6 +562,8 @@
     }
 
     setDefaultDates();
+
+
 </script>
 </body>
 
