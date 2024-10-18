@@ -10,8 +10,258 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
     <script src="js/script.js"></script>
-    <link rel="stylesheet" href="css/style.css">
     <style>
+        body {
+            margin-top: 90px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .hero {
+            background-image: url('https://picsum.photos/1920/1080');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            text-align: center;
+            height: 40vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 20px;
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            margin: 0;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin: 10px 0 30px;
+        }
+
+        hr {
+            margin: 0 2rem 0;
+        }
+
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 50px;
+        }
+
+        .button {
+            width: 30vh;
+            display: flex;
+            align-items: center;
+            padding: 25px 20px;
+            border-radius: 20px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .button i {
+            margin-right: 10px;
+        }
+
+        .location-button,
+        .date-button {
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #ccc;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .location-button:hover,
+        .date-button:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .search-button {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            border-radius: 10px;
+            transition: opacity 0.3s;
+            margin-top: 10px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            opacity: 1;
+        }
+
+        .sub-dropdown {
+            position: relative;
+        }
+
+        .sub-dropdown-content {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            min-width: 160px;
+            background-color: #f9f9f9;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .sub-dropdown:hover .sub-dropdown-content {
+            display: block;
+        }
+
+        .member-section {
+            display: flex;
+            align-items: center;
+            padding: 1in 3in;
+        }
+
+        .member-section .text {
+            flex: 1;
+        }
+
+        .member-section h3 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .member-section p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .member-section button {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .member-section .image {
+            flex: 1;
+            text-align: right;
+        }
+
+        .locations {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .locations h3 {
+            font-size: 24px;
+            margin: 0 0 30px;
+        }
+
+        .locations .location-cards {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 10px;
+        }
+
+        .locations .location-card {
+            position: relative;
+            min-width: 30vh;
+            max-width: 30vh;
+            border-radius: 15px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .locations .location-card img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .locations .location-card p {
+            width: 50%;
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            margin: 0;
+            padding: 5px 10px;
+            border-bottom-right-radius: 15px;
+            border-top-left-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .faq {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .faq h3 {
+            font-size: 24px;
+            margin: 0 0 30px;
+        }
+
+        .faq .faq-item {
+            background-color: #000;
+            color: #fff;
+            padding: 30px;
+            margin: 10px 0;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .footer .social-icons {
+            margin: 10px 0;
+        }
+
+        .footer .social-icons i {
+            margin: 0 5px;
+            color: #000;
+            cursor: pointer;
+        }
+
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -44,7 +294,8 @@
             <span id="dropdownText">Current Location</span>
             <div class="dropdown-content">
                 <c:forEach var="item" items="${locations}">
-                    <a href="HotelListServlet?locationId=${item.locationId}" onclick="setDropdownValue('${item.name}')">${item.name}</a>
+                    <a href="HotelListServlet?locationId=${item.locationId}"
+                       onclick="setDropdownValue('${item.name}')">${item.name}</a>
                 </c:forEach>
             </div>
         </div>

@@ -153,7 +153,7 @@
       <div class="input-group">
         <input type="password" placeholder="Password">
       </div>
-      <button class="login-btn" onclick="location.href='index.jsp'">Let's Go</button>
+      <button class="login-btn" onclick="location.href='dashboard.jsp'">Let's Go</button>
       <div class="signup-link">
         Don't have an account? <a href="#" onclick="toggleTab('signup')">Sign Up</a>
       </div>

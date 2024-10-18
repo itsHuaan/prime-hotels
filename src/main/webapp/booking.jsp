@@ -360,7 +360,7 @@
 </head>
 
 <body>
-<jsp:include page="components/header.jsp"/>
+<jsp:include page="static/components/header.jsp"/>
 <c:set var="discountedPrice" value="${hotel.price - (hotel.price * (hotel.discount / 100))}"/>
 <div class="container">
     <div class="header-container">
