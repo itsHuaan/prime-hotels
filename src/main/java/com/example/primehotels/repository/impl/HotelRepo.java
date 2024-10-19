@@ -93,6 +93,11 @@ public class HotelRepo implements IHotelRepo {
     }
 
     @Override
+    public HotelEntity updateRoomAvailable(String hotelId) {
+        return null;
+    }
+
+    @Override
     public int save(HotelEntity hotelEntity) {
         return 0;
     }
