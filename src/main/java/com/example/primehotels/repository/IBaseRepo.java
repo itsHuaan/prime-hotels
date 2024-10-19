@@ -11,6 +11,6 @@ public interface IBaseRepo<T, U> {
     List<T> getAll();
     T getById(U id);
     int save(T t);
-    ApiResponse delete(U id);
+    int delete(U id);
     T resultSetToEntity(ResultSet resultSet) throws SQLException;
 }

@@ -22,15 +22,28 @@
 <!-- Sidebar Start -->
 <jsp:include page="components/sidebar.jsp"/>
 <!-- Sidebar End -->
+
+<!-- Content Start -->
 <div class="content">
     <!-- Navbar Start -->
     <jsp:include page="components/navbar.jsp"/>
     <!-- Navbar End -->
+
     <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
             <div class="col-12">
                 <div class="bg-secondary rounded h-100 p-4">
-                    <h6 class="mb-4">Responsive Table</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h6>Hotel Management</h6>
+                        <button
+                                type="button"
+                                class="btn btn-primary m-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#addHotel">
+                            <i class="bi bi-plus"></i>
+                            Add new hotel
+                        </button>
+                    </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -54,7 +67,14 @@
                                     <td>${item.description}</td>
                                     <td>${item.roomAvailable}</td>
                                     <td>${item.price}</td>
-                                    <td>${item.status}</td>
+                                    <td>
+                                        <c:if test="${item.status == 1}">
+                                            Active
+                                        </c:if>
+                                        <c:if test="${item.status == 0}">
+                                            Inactive
+                                        </c:if>
+                                    </td>
                                     <td>
                                         <button
                                                 type="button"
@@ -81,8 +101,9 @@
                                                 type="button"
                                                 class="btn btn-primary"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"
-                                                data-whatever="@mdo">
+                                                data-bs-target="#deleteHotel"
+                                                data-hotelId="${item.hotelId}"
+                                                data-name="${item.name}">
                                             Delete
                                         </button>
                                     </td>
@@ -96,26 +117,57 @@
         </div>
     </div>
 
-    <!-- Edit Modal Start -->
-    <div class="modal fade" id="editHotel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Add new Modal Start -->
+    <div
+            class="modal fade"
+            id="addHotel"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+    >
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-secondary">
-                <div class="modal-header">
-                    <h5 class="modal-title text-white" id="exampleModalLabel">Edit Hotel Information</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="#" method="post">
+                <form action="SaveServlet" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-white">
+                            Add new hotel
+                        </h5>
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <input
+                                type="hidden"
+                                name="sourcePage"
+                                value="hotelManagementPage"
+                        />
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="hotelId" placeholder="Hotel ID">
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    name="hotelId"
+                                    placeholder="Hotel ID"
+                            />
                             <label for="hotelId">Hotel ID</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" placeholder="Hotel Name">
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    name="name"
+                                    placeholder="Hotel Name"
+                            />
                             <label for="name">Hotel Name</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select class="form-select" id="locationId">
+                            <select
+                                    class="form-select"
+                                    name="locationId"
+                            >
                                 <c:forEach var="item" items="${locations}">
                                     <option value="${item.locationId}">${item.name}</option>
                                 </c:forEach>
@@ -123,79 +175,245 @@
                             <label for="locationId">Location</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="address" placeholder="Address">
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    name="address"
+                                    placeholder="Address"
+                            />
                             <label for="address">Address</label>
                         </div>
                         <div class="form-floating mb-3">
-                                <textarea class="form-control" id="description" placeholder="Description"
+                    <textarea
+                            class="form-control"
+                            name="description"
+                            placeholder="Description"
+                            style="height: 100px"
+                    ></textarea>
+                            <label for="description">Description</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    name="roomAvailable"
+                                    placeholder="Room Available"
+                                    min="1"
+                            />
+                            <label for="roomAvailable">Room Available</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formFileMultiple" class="form-label"
+                            >Images</label
+                            >
+                            <input
+                                    class="form-control bg-dark"
+                                    type="file"
+                                    name="image"
+                                    multiple=""
+                            />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="price"
+                                    placeholder="Price"
+                                    min="1"
+                            />
+                            <label for="price">Price</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    name="discount"
+                                    value="0"
+                                    placeholder="Discount"
+                                    min="0"
+                            />
+                            <label for="discount">Discount (%)</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name="status">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                            <label for="status">Status</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select
+                                    class="form-select"
+                                    name="facilityListId"
+                            >
+                                <c:forEach var="item" items="${facilities}">
+                                    <option value="${item.facilityListId}">
+                                            ${item.name}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                            <label for="facilityListId">Facility List</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Add new Modal End -->
+
+    <!-- Edit Modal Start -->
+    <div class="modal fade" id="editHotel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-secondary">
+                <form action="SaveServlet" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-white" id="exampleModalLabel">Edit Hotel Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="sourcePage" value="hotelManagementPage">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="hotelId" name="hotelId" placeholder="Hotel ID">
+                            <label for="hotelId">Hotel ID</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Hotel Name">
+                            <label for="name">Hotel Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="locationId" name="locationId">
+                                <c:forEach var="item" items="${locations}">
+                                    <option value="${item.locationId}">${item.name}</option>
+                                </c:forEach>
+                            </select>
+                            <label for="locationId">Location</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="address" name="address" placeholder="Address">
+                            <label for="address">Address</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                                <textarea class="form-control" id="description" name="description"
+                                          placeholder="Description"
                                           style="height: 100px;"></textarea>
                             <label for="description">Description</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="number" class="form-control" id="roomAvailable"
+                            <input type="number" class="form-control" id="roomAvailable" name="roomAvailable"
                                    placeholder="Room Available" min="1">
                             <label for="roomAvailable">Room Available</label>
                         </div>
                         <div class="mb-3">
                             <label for="formFileMultiple" class="form-label">Images</label>
-                            <input class="form-control bg-dark" type="file" id="formFileMultiple" multiple="">
+                            <input class="form-control bg-dark" type="file" id="formFileMultiple" name="image"
+                                   multiple="">
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="number" step="0.01" class="form-control" id="price" placeholder="Price"
+                            <input type="number" step="0.01" class="form-control" id="price" name="price"
+                                   placeholder="Price"
                                    min="1">
                             <label for="price">Price</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="number" class="form-control" id="discount" value="0"
+                            <input type="number" class="form-control" id="discount" name="discount" value="0"
                                    placeholder="Discount" min="0">
                             <label for="discount">Discount (%)</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select class="form-select" id="status">
-                                <option value="true">Active</option>
-                                <option value="false">Inactive</option>
+                            <select class="form-select" id="status" name="status">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
                             </select>
                             <label for="status">Status</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select class="form-select" id="facilityListId">
-                                <option value="">1</option>
-                                <option value="">2</option>
+                            <select class="form-select" id="facilityListId" name="facilityListId">
+                                <c:forEach var="item" items="${facilities}">
+                                    <option value="${item.facilityListId}">${item.name}</option>
+                                </c:forEach>
                             </select>
                             <label for="facilityListId">Facility List</label>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
     <!-- Edit Modal End -->
 
+    <!-- Delete Modal Start -->
+    <div class="modal fade" id="deleteHotel" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-secondary">
+                <form action="DeleteServlet" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-white" id="deleteModalLabel">Delete Hotel</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this hotel?</p>
+                        <p id="deleteHotelName" class="text-danger font-weight-bold"></p>
+                        <input type="hidden" id="_hotelId" name="_hotelId" value="">
+                        <input type="hidden" name="_sourcePage" value="hotelManagementPage">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" id="confirmDelete">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Modal End -->
+
     <jsp:include page="components/admin_footer.jsp"/>
 </div>
+<!-- Content End -->
+
 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 <jsp:include page="components/js_libraries.jsp"/>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var editHotelModal = document.getElementById('editHotel');
+        let deleteHotelModal = document.getElementById('deleteHotel');
+        deleteHotelModal.addEventListener('show.bs.modal', function (event) {
+            let button = event.relatedTarget;
+            document.getElementById('_hotelId').value = button.getAttribute('data-hotelId');
+        });
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let editHotelModal = document.getElementById('editHotel');
 
         editHotelModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
+            let button = event.relatedTarget;
 
-            var hotelId = button.getAttribute('data-hotelId');
-            var name = button.getAttribute('data-name');
-            var locationId = button.getAttribute('data-locationId');
-            var address = button.getAttribute('data-address');
-            var description = button.getAttribute('data-description');
-            var roomAvailable = button.getAttribute('data-roomAvailable');
-            var price = button.getAttribute('data-price');
-            var discount = button.getAttribute('data-discount');
-            var status = button.getAttribute('data-status');
-            var facilityListId = button.getAttribute('data-facilityListId');
+            let hotelId = button.getAttribute('data-hotelId');
+            let name = button.getAttribute('data-name');
+            let locationId = button.getAttribute('data-locationId');
+            let address = button.getAttribute('data-address');
+            let description = button.getAttribute('data-description');
+            let roomAvailable = button.getAttribute('data-roomAvailable');
+            let price = button.getAttribute('data-price');
+            let discount = button.getAttribute('data-discount');
+            let status = button.getAttribute('data-status');
+            let facilityListId = button.getAttribute('data-facilityListId');
 
             document.getElementById('hotelId').value = hotelId;
             document.getElementById('name').value = name;
@@ -205,7 +423,7 @@
             document.getElementById('roomAvailable').value = roomAvailable;
             document.getElementById('price').value = price;
             document.getElementById('discount').value = discount;
-            document.getElementById('status').value = status === 'true' ? 'true' : 'false';
+            document.getElementById('status').value = status === "1" ? "1" : "0";
             document.getElementById('facilityListId').value = facilityListId;
         });
     });

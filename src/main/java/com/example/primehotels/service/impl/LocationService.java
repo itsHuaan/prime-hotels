@@ -1,5 +1,6 @@
 package com.example.primehotels.service.impl;
 
+import com.example.primehotels.dto.HotelDTO;
 import com.example.primehotels.dto.LocationDTO;
 import com.example.primehotels.entity.LocationEntity;
 import com.example.primehotels.mapper.LocationMapper;
@@ -43,7 +44,7 @@ public class LocationService implements ILocationService {
     }
 
     @Override
-    public ApiResponse delete(Integer id) {
-        return null;
+    public int delete(Integer id) {
+        return 0;
     }
 }

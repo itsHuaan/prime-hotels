@@ -25,12 +25,12 @@ public class LocationMapper {
                 .build();
     }
 
-    public LocationModel toModel(LocationEntity locationEntity) {
+    public LocationModel toModel(LocationDTO locationDTO) {
         return LocationModel.builder()
-                .locationId(locationEntity.getLocationId())
-                .name(locationEntity.getName())
-                .parentId(locationEntity.getParentId())
-                .type(locationEntity.getType())
+                .locationId(locationDTO.getLocationId())
+                .name(locationDTO.getName())
+                .parentId(locationDTO.getParentId())
+                .type(locationDTO.getType())
                 .build();
     }
 }

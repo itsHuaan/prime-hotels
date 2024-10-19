@@ -30,7 +30,7 @@ public class LocationRepo implements ILocationRepo {
             while (resultSet.next()) {
                 list.add(resultSetToEntity(resultSet));
             }
-            databaseConnector.closeConnection();
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -53,8 +53,8 @@ public class LocationRepo implements ILocationRepo {
     }
 
     @Override
-    public ApiResponse delete(Integer id) {
-        return null;
+    public int delete(Integer id) {
+        return 0;
     }
 
     @Override

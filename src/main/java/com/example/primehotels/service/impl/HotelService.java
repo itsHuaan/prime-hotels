@@ -44,11 +44,11 @@ public class HotelService implements IHotelService {
 
     @Override
     public int save(HotelDTO hotelDTO) {
-        return 0;
+        return hotelRepo.save(mapper.toEntity(mapper.toModel(hotelDTO)));
     }
 
     @Override
-    public ApiResponse delete(String id) {
-        return null;
+    public int delete(String id) {
+        return hotelRepo.delete(id);
     }
 }

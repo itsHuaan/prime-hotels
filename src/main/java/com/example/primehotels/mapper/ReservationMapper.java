@@ -31,16 +31,16 @@ public class ReservationMapper {
                 .status(reservationModel.getStatus())
                 .build();
     }
-    public ReservationModel toModel(ReservationEntity reservationEntity) {
+    public ReservationModel toModel(ReservationDTO reservationDTO) {
         return ReservationModel.builder()
-                .reservationId(reservationEntity.getReservationId())
-                .customerId(reservationEntity.getCustomerId())
-                .hotelId(reservationEntity.getHotelId())
-                .checkIn(reservationEntity.getCheckIn())
-                .checkOut(reservationEntity.getCheckOut())
-                .reserveDate(reservationEntity.getReserveDate())
-                .deposit(reservationEntity.getDeposit())
-                .status(reservationEntity.getStatus())
+                .reservationId(reservationDTO.getReservationId())
+                .customerId(reservationDTO.getCustomerId())
+                .hotelId(reservationDTO.getHotelId())
+                .checkIn(reservationDTO.getCheckIn())
+                .checkOut(reservationDTO.getCheckOut())
+                .reserveDate(reservationDTO.getReserveDate())
+                .deposit(reservationDTO.getDeposit())
+                .status(reservationDTO.getStatus())
                 .build();
     }
 }

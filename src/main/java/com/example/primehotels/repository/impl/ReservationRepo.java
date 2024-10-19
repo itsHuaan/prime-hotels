@@ -39,8 +39,9 @@ public class ReservationRepo implements IReservationRepo {
             preparedStatement.setDouble(7, reservationEntity.getDeposit());
             preparedStatement.setInt(8, reservationEntity.getStatus());
             if (preparedStatement.executeUpdate() > 0) {
-                return 1;
+                return preparedStatement.executeUpdate();
             }
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -48,8 +49,8 @@ public class ReservationRepo implements IReservationRepo {
     }
 
     @Override
-    public ApiResponse delete(String id) {
-        return null;
+    public int delete(String id) {
+        return 0;
     }
 
     @Override

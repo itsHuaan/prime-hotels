@@ -24,11 +24,11 @@ public class FacilityListMapper {
                 .build();
     }
 
-    public FacilityListModel toModel(FacilityListEntity facilityListEntity) {
+    public FacilityListModel toModel(FacilityListDTO facilityListDTO) {
         return FacilityListModel.builder()
-                .facilityListId(facilityListEntity.getFacilityListId())
-                .name(facilityListEntity.getName())
-                .facilityId(facilityListEntity.getFacilityId())
+                .facilityListId(facilityListDTO.getFacilityListId())
+                .name(facilityListDTO.getName())
+                .facilityId(facilityListDTO.getFacilityId())
                 .build();
     }
 }

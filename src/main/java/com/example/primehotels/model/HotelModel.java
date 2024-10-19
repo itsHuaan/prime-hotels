@@ -19,6 +19,6 @@ public class HotelModel {
     private double price;
     private int discount = 0;
     private double rating;
-    private boolean status;
+    private int status;
     private int facilityListId;
 }

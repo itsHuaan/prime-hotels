@@ -21,8 +21,4 @@ public class DatabaseConnector {
 
         return conn;
     }
-
-    public void closeConnection() throws SQLException {
-        conn.close();
-    }
 }

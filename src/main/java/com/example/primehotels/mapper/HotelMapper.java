@@ -19,6 +19,7 @@ public class HotelMapper {
                 .price(hotelEntity.getPrice())
                 .discount(hotelEntity.getDiscount())
                 .rating(hotelEntity.getRating())
+                .status(hotelEntity.getStatus())
                 .facilityListId(hotelEntity.getFacilityListId())
                 .build();
     }
@@ -35,25 +36,25 @@ public class HotelMapper {
                 .price(hotelModel.getPrice())
                 .discount(hotelModel.getDiscount())
                 .rating(hotelModel.getRating())
-                .status(hotelModel.isStatus())
+                .status(hotelModel.getStatus())
                 .facilityListId(hotelModel.getFacilityListId())
                 .build();
     }
 
-    public HotelModel toModel(HotelEntity hotelEntity) {
+    public HotelModel toModel(HotelDTO hotelDTO) {
         return HotelModel.builder()
-                .hotelId(hotelEntity.getHotelId())
-                .name(hotelEntity.getName())
-                .locationId(hotelEntity.getLocationId())
-                .address(hotelEntity.getAddress())
-                .description(hotelEntity.getDescription())
-                .roomAvailable(hotelEntity.getRoomAvailable())
-                .image(hotelEntity.getImage())
-                .price(hotelEntity.getPrice())
-                .discount(hotelEntity.getDiscount())
-                .rating(hotelEntity.getRating())
-                .status(hotelEntity.isStatus())
-                .facilityListId(hotelEntity.getFacilityListId())
+                .hotelId(hotelDTO.getHotelId())
+                .name(hotelDTO.getName())
+                .locationId(hotelDTO.getLocationId())
+                .address(hotelDTO.getAddress())
+                .description(hotelDTO.getDescription())
+                .roomAvailable(hotelDTO.getRoomAvailable())
+                .image(hotelDTO.getImage())
+                .price(hotelDTO.getPrice())
+                .discount(hotelDTO.getDiscount())
+                .rating(hotelDTO.getRating())
+                .status(hotelDTO.getStatus())
+                .facilityListId(hotelDTO.getFacilityListId())
                 .build();
     }
 }

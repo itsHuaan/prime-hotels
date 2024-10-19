@@ -35,7 +35,7 @@ public class HotelRepo implements IHotelRepo {
 
     @Override
     public HotelEntity getById(String id) {
-        HotelEntity hotelEntity = new HotelEntity();
+        HotelEntity hotelEntity = null;
         try {
             connection = databaseConnector.openConnection();
             String query = "select * from tbl_hotel where hotelId = ?";
@@ -45,6 +45,7 @@ public class HotelRepo implements IHotelRepo {
             if (resultSet.next()) {
                 hotelEntity = resultSetToEntity(resultSet);
             }
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -86,6 +87,7 @@ public class HotelRepo implements IHotelRepo {
             while (resultSet.next()) {
                 list.add(resultSet.getString("name"));
             }
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -99,12 +101,76 @@ public class HotelRepo implements IHotelRepo {
 
     @Override
     public int save(HotelEntity hotelEntity) {
+        boolean isExisting = getById(hotelEntity.getHotelId()) != null;
+        if (isExisting){
+            try {
+                connection = databaseConnector.openConnection();
+                String query = "update tbl_hotel set name = ?, locationId = ?, address = ?, description = ?, roomAvailable = ?, image = ?, price = ?, discount = ?, rating = ?, status = ?, facilityListId = ? where hotelId = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, hotelEntity.getName());
+                preparedStatement.setInt(2, hotelEntity.getLocationId());
+                preparedStatement.setString(3, hotelEntity.getAddress());
+                preparedStatement.setString(4, hotelEntity.getDescription());
+                preparedStatement.setInt(5, hotelEntity.getRoomAvailable());
+                preparedStatement.setString(6, hotelEntity.getImage());
+                preparedStatement.setDouble(7, hotelEntity.getPrice());
+                preparedStatement.setInt(8, hotelEntity.getDiscount());
+                preparedStatement.setDouble(9, hotelEntity.getRating());
+                preparedStatement.setInt(10, hotelEntity.getStatus());
+                preparedStatement.setInt(11, hotelEntity.getFacilityListId());
+                preparedStatement.setString(12, hotelEntity.getHotelId());
+                int rowAffected = preparedStatement.executeUpdate();
+                if (rowAffected > 0) {
+                    return rowAffected;
+                }
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            try {
+                connection = databaseConnector.openConnection();
+                String query = "insert into tbl_hotel values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, hotelEntity.getHotelId());
+                preparedStatement.setString(2, hotelEntity.getName());
+                preparedStatement.setInt(3, hotelEntity.getLocationId());
+                preparedStatement.setString(4, hotelEntity.getAddress());
+                preparedStatement.setString(5, hotelEntity.getDescription());
+                preparedStatement.setInt(6, hotelEntity.getRoomAvailable());
+                preparedStatement.setString(7, hotelEntity.getImage());
+                preparedStatement.setDouble(8, hotelEntity.getPrice());
+                preparedStatement.setInt(9, hotelEntity.getDiscount());
+                preparedStatement.setDouble(10, hotelEntity.getRating());
+                preparedStatement.setInt(11, hotelEntity.getStatus());
+                preparedStatement.setInt(12, hotelEntity.getFacilityListId());
+                int rowAffected = preparedStatement.executeUpdate();
+                if (rowAffected > 0) {
+                    return rowAffected;
+                }
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return 0;
     }
 
     @Override
-    public ApiResponse delete(String id) {
-        return null;
+    public int delete(String id) {
+        try {
+            connection = databaseConnector.openConnection();
+            String query = "update tbl_hotel set status = 0 where hotelId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, id);
+            int rowAffected = preparedStatement.executeUpdate();
+            if (rowAffected > 0) {
+                return rowAffected;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
     }
 
     @Override
@@ -120,7 +186,7 @@ public class HotelRepo implements IHotelRepo {
                 resultSet.getDouble(8),
                 resultSet.getInt(9),
                 resultSet.getDouble(10),
-                resultSet.getBoolean(11),
+                resultSet.getInt(11),
                 resultSet.getInt(12)
         );
     }
