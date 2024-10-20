@@ -47,7 +47,7 @@
                                 <th scope="col">Deposit</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Created At</th>
-                                <th scope="col" colspan="2">Actions</th>
+                                <th scope="col" colspan="3">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -58,7 +58,7 @@
                                     <td>${item.hotelId}</td>
                                     <td>${item.checkIn}</td>
                                     <td>${item.checkOut}</td>
-                                    <td>${item.deposit}</td>
+                                    <td>&#36;${item.deposit}</td>
                                     <td>
                                         <c:if test="${item.status == 1}">
                                             Reserved
@@ -66,8 +66,11 @@
                                         <c:if test="${item.status == 2}">
                                             Checked Out
                                         </c:if>
+                                        <c:if test="${item.status == 3}">
+                                            Canceled
+                                        </c:if>
                                     </td>
-                                    <td>${item.reserveDate}</td>
+                                    <td>${item.createdAt}</td>
                                     <td>
                                         <button
                                                 type="button"
@@ -79,7 +82,7 @@
                                                 data-hotelId="${item.hotelId}"
                                                 data-checkIn="${item.checkIn}"
                                                 data-checkOut="${item.checkOut}"
-                                                data-reserveDate="${item.reserveDate}"
+                                                data-createdAt="${item.createdAt}"
                                                 data-deposit="${item.deposit}"
                                                 data-status="${item.status}">
                                             Edit
@@ -88,9 +91,19 @@
                                     <td>
                                         <button
                                                 type="button"
+                                                class="btn btn-light" data-bs-toggle="modal"
+                                                data-bs-target="#checkOut"
+                                                data-reservationId="${item.reservationId}"
+                                                data-deposit="${item.deposit}">
+                                            Check Out
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button
+                                                type="button"
                                                 class="btn btn-primary"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#deleteHotel"
+                                                data-bs-target="#deleteReservation"
                                                 data-reservationId="${item.reservationId}">
                                             Delete
                                         </button>
@@ -191,9 +204,11 @@
                             <select class="form-select" name="status" id="status">
                                 <option value="1">Reserved</option>
                                 <option value="2">Checked Out</option>
+                                <option value="3">Canceled</option>
                             </select>
                             <label for="status">Status</label>
                         </div>
+                        <input type="hidden" id="createdAt" name="createdAt"/>
                     </div>
                     <div class="modal-footer">
                         <button
@@ -212,19 +227,19 @@
     <!-- Edit Modal End -->
 
     <!-- Delete Modal Start -->
-    <div class="modal fade" id="deleteHotel" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteReservation" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content bg-secondary">
                 <form action="DeleteServlet" method="post">
                     <div class="modal-header">
-                        <h5 class="modal-title text-white" id="deleteModalLabel">Delete Hotel</h5>
+                        <h5 class="modal-title text-white" id="deleteModalLabel">Delete Reservation</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to delete this hotel?</p>
-                        <p id="deleteHotelName" class="text-danger font-weight-bold"></p>
+                        <p>Are you sure you want to delete this reservation?</p>
+                        <p id="deleteReservationName" class="text-danger font-weight-bold"></p>
                         <input type="hidden" id="_hotelId" name="_hotelId" value="">
-                        <input type="hidden" name="_sourcePage" value="hotelManagementPage">
+                        <input type="hidden" name="_sourcePage" value="reservationManagementPage">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -244,8 +259,8 @@
 <jsp:include page="components/js_libraries.jsp"/>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let deleteHotelModal = document.getElementById('deleteHotel');
-        deleteHotelModal.addEventListener('show.bs.modal', function (event) {
+        let deleteReservationModal = document.getElementById('deleteReservation');
+        deleteReservationModal.addEventListener('show.bs.modal', function (event) {
             let button = event.relatedTarget;
             document.getElementById('_hotelId').value = button.getAttribute('data-hotelId');
         });
@@ -262,6 +277,7 @@
             let checkOut = button.getAttribute('data-checkOut');
             let deposit = button.getAttribute('data-deposit');
             let status = button.getAttribute('data-status');
+            let createdAt = button.getAttribute('data-createdAt');
             document.getElementById('reservationId').value = reservationId;
             document.getElementById('customerId').value = customerId;
             document.getElementById('hotelId').value = hotelId;
@@ -269,6 +285,7 @@
             document.getElementById('checkOut').value = checkOut;
             document.getElementById('deposit').value = deposit;
             document.getElementById('status').value = status;
+            document.getElementById('createdAt').value = createdAt;
         });
     });
 

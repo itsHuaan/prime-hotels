@@ -66,7 +66,7 @@
                                     <td>${item.address}</td>
                                     <td>${item.description}</td>
                                     <td>${item.roomAvailable}</td>
-                                    <td>${item.price}</td>
+                                    <td>&#36;${item.price}</td>
                                     <td>${item.rating}</td>
                                     <td>
                                         <button

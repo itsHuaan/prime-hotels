@@ -21,7 +21,7 @@ public class ReservationRepo implements IReservationRepo {
         List<ReservationEntity> list = new ArrayList<>();
         try {
             connection = databaseConnector.openConnection();
-            String query = "select * from tbl_reservation";
+            String query = "select * from tbl_reservation where status <> 4";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -103,6 +103,18 @@ public class ReservationRepo implements IReservationRepo {
 
     @Override
     public int delete(String id) {
+        try {
+            connection = databaseConnector.openConnection();
+            String query = "update tbl_reservation set status = 4 where reservationId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, id);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                return rowsAffected;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return 0;
     }
 

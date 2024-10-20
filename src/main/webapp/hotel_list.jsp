@@ -238,13 +238,13 @@
                     <div class="price-discount">
                         <div class="price-line">
                             <span class="current-price">
-                                $<fmt:formatNumber
+                                &#36;<fmt:formatNumber
                                     type="number"
                                     maxFractionDigits="2"
                                     minFractionDigits="2"
                                     value="${item.price - (item.price * (item.discount/100))}"/>
                             </span>
-                            <span class="original-price">$${item.price}</span>
+                            <span class="original-price">&#36;${item.price}</span>
                             <span class="discount">${item.discount}% OFF</span>
                         </div>
                         <p class="per-night">per night/room</p>

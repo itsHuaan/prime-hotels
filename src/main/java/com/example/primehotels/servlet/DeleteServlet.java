@@ -27,8 +27,10 @@ public class DeleteServlet extends HttpServlet {
             }
             hotelService.delete(hotelId);
             response.sendRedirect("HotelManagementServlet");
-        } else {
-            System.out.println("Nah bro");
+        }
+        if (sourcePage.equalsIgnoreCase("reservationManagementPage")) {
+            System.out.println(sourcePage);
+            response.sendRedirect("ReservationManagementServlet");
         }
     }
 }

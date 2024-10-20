@@ -6,11 +6,14 @@ import com.example.primehotels.model.HotelModel;
 import com.example.primehotels.model.ReservationModel;
 import com.example.primehotels.service.impl.HotelService;
 import com.example.primehotels.service.impl.ReservationService;
+import com.example.primehotels.util.DateConverter;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @WebServlet(name = "SaveServlet", value = "/SaveServlet")
 public class SaveServlet extends HttpServlet {
@@ -38,9 +41,7 @@ public class SaveServlet extends HttpServlet {
         if (sourcePage.equalsIgnoreCase("reservationManagementPage")) {
             ReservationService reservationService = new ReservationService();
             ReservationMapper mapper = new ReservationMapper();
-            String checkIn = request.getParameter("checkIn");
-            String checkOut = request.getParameter("checkOut");
-            System.out.println(checkIn + "\n" + checkOut);
+            System.out.println(getReservationFromRequest(request, response));
             response.sendRedirect("ReservationManagementServlet");
         }
     }
@@ -60,8 +61,7 @@ public class SaveServlet extends HttpServlet {
         double price = Double.parseDouble(request.getParameter("price"));
         int discount = Integer.parseInt(request.getParameter("discount"));
         int facilityListId = Integer.parseInt(request.getParameter("facilityListId"));
-        hotel = new HotelModel(hotelId, hotelName, locationId, address, description, roomAvailable, null, price, discount, 5.0, 1, facilityListId);
-        return hotel;
+        return new HotelModel(hotelId, hotelName, locationId, address, description, roomAvailable, null, price, discount, 5.0, 1, facilityListId);
     }
 
     private ReservationModel getReservationFromRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -71,9 +71,16 @@ public class SaveServlet extends HttpServlet {
             reservation = null;
             return reservation;
         }
-        String customerId = request.getParameter("reservationName");
+        String customerId = request.getParameter("customerId");
         String hotelId = request.getParameter("hotelId");
-
-        return null;
+        String checkInStr = request.getParameter("checkIn");
+        Date checkIn = DateConverter.stringToDate(checkInStr);
+        String checkOutStr = request.getParameter("checkOut");
+        Date checkOut = DateConverter.stringToDate(checkOutStr);
+        String createdAtStr = request.getParameter("createdAt");
+        LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
+        double depositAmount = Double.parseDouble(request.getParameter("deposit"));
+        int status = Integer.parseInt(request.getParameter("status"));
+        return new ReservationModel(reservationId, customerId, hotelId, checkIn, checkOut, createdAt, depositAmount, status);
     }
 }
