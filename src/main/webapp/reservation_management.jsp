@@ -92,7 +92,7 @@
                                         <button
                                                 type="button"
                                                 class="btn btn-light" data-bs-toggle="modal"
-                                                data-bs-target="#checkOut"
+                                                data-bs-target="#checkOutModal"
                                                 data-reservationId="${item.reservationId}"
                                                 data-deposit="${item.deposit}">
                                             Check Out
@@ -251,6 +251,32 @@
     </div>
     <!-- Delete Modal End -->
 
+    <!-- Check Out Modal Start -->
+    <div class="modal fade" id="checkOutModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-secondary">
+                <form action="SaveServlet" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-white" id="checkOutModalLabel">Delete Reservation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Check Out for ?</p>
+                        <p id="checkOutReservationName" class="text-danger font-weight-bold"></p>
+                        <input type="hidden" id="_reservationId" name="_reservationId" value="">
+                        <input type="hidden" id="_deposit" name="_deposit" value="">
+                        <input type="hidden" name="sourcePage" value="checkOut">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" id="confirmCheckOut">Check Out</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Check Out Modal End -->
+
     <jsp:include page="components/admin_footer.jsp"/>
 </div>
 <!-- Content End -->
@@ -258,6 +284,16 @@
 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 <jsp:include page="components/js_libraries.jsp"/>
 <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let checkOutModal = document.getElementById('checkOutModal');
+        checkOutModal.addEventListener('show.bs.modal', function (event) {
+            let button = event.relatedTarget;
+            document.getElementById('_reservationId').value = button.getAttribute('data-reservationId');
+            document.getElementById('_deposit').value = button.getAttribute('data-deposit');
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         let deleteReservationModal = document.getElementById('deleteReservation');
         deleteReservationModal.addEventListener('show.bs.modal', function (event) {

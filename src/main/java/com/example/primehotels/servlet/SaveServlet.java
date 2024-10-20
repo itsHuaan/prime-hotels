@@ -44,6 +44,11 @@ public class SaveServlet extends HttpServlet {
             System.out.println(getReservationFromRequest(request, response));
             response.sendRedirect("ReservationManagementServlet");
         }
+
+        if (sourcePage.equalsIgnoreCase("checkOut")) {
+            String reservationId = request.getParameter("reservationId");
+            System.out.println("Check out for " + reservationId);
+        }
     }
 
     private HotelModel getHotelFromRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

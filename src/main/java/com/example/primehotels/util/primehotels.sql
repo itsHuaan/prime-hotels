@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 17, 2024 at 11:55 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Oct 20, 2024 at 07:51 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,6 +33,13 @@ CREATE TABLE `tbl_customer` (
   `tel` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_customer`
+--
+
+INSERT INTO `tbl_customer` (`customerId`, `name`, `tel`, `email`) VALUES
+('001201007756', 'Tran Hoang Long', '0375976671', 'long1187@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -103,7 +110,7 @@ CREATE TABLE `tbl_hotel` (
   `price` decimal(10,0) NOT NULL,
   `discount` int(11) DEFAULT NULL,
   `rating` decimal(10,0) NOT NULL,
-  `status` tinyint(1) NOT NULL,
+  `status` int(1) NOT NULL,
   `facilityListId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -112,16 +119,12 @@ CREATE TABLE `tbl_hotel` (
 --
 
 INSERT INTO `tbl_hotel` (`hotelId`, `name`, `locationId`, `address`, `description`, `roomAvailable`, `image`, `price`, `discount`, `rating`, `status`, `facilityListId`) VALUES
-('H001', 'Sunshine Hotel', 1, '123 Ocean Drive, Beach City', 'A seaside hotel with ocean views', 50, 'sunshine_hotel.jpg', 150, 50, 5, 1, 1),
-('H002', 'Mountain Retreat', 2, '456 Mountain Road, High Peaks', 'A cozy retreat in the mountains', 20, 'mountain_retreat.jpg', 200, 50, 5, 1, 2),
-('H003', 'City Lights Hotel', 3, '789 Central Avenue, Metropolis', 'A luxury hotel in the heart of the city', 100, 'city_lights.jpg', 300, 50, 5, 1, 3),
-('H004', 'Forest Lodge', 4, '101 Forest Lane, Greenwoods', 'A peaceful lodge surrounded by nature', 30, 'forest_lodge.jpg', 120, 50, 4, 1, 4),
-('H005', 'Desert Oasis', 5, '202 Desert Road, Sandville', 'An exotic hotel in the desert', 25, 'desert_oasis.jpg', 180, 50, 5, 1, 5),
-('H006', 'Sunset Resort', 1, '234 Ocean Drive, Beach City', 'A resort with sunset views by the beach', 60, 'sunset_resort.jpg', 220, 50, 5, 1, 1),
-('H007', 'Peak Heights Hotel', 2, '567 Mountain Road, High Peaks', 'A hotel offering breathtaking mountain views', 35, 'peak_heights.jpg', 250, 50, 5, 1, 2),
-('H008', 'Skyline Towers', 3, '890 Central Avenue, Metropolis', 'A modern high-rise hotel in the city', 120, 'skyline_towers.jpg', 320, 50, 5, 1, 3),
-('H009', 'Woodland Inn', 4, '202 Forest Lane, Greenwoods', 'A charming inn located deep in the forest', 40, 'woodland_inn.jpg', 110, 50, 5, 1, 4),
-('H010', 'Mirage Hotel', 5, '303 Desert Road, Sandville', 'A luxury hotel in the desert with an oasis feel', 28, 'mirage_hotel.jpg', 200, 50, 5, 1, 5);
+('H001', 'Sunshine Hotel', 1, '123 Ocean Drive, Beach City', 'A seaside hotel with ocean views', 50, 'sunshine_hotel.jpg', 150, 0, 5, 1, 1),
+('H002', 'Mountain Retreat', 2, '456 Mountain Road, High Peaks', 'A cozy retreat in the mountains', 20, 'mountain_retreat.jpg', 200, 0, 5, 1, 2),
+('H003', 'City Lights Hotel', 3, '789 Central Avenue, Metropolis', 'A luxury hotel in the heart of the city', 100, 'city_lights.jpg', 300, 0, 5, 1, 3),
+('H004', 'Forest Lodge', 4, '101 Forest Lane, Greenwoods', 'A peaceful lodge surrounded by nature', 30, 'forest_lodge.jpg', 120, 0, 4, 1, 4),
+('H005', 'Desert Oasis', 5, '202 Desert Road, Sandville', 'An exotic hotel in the desert', 25, 'desert_oasis.jpg', 180, 0, 5, 1, 5),
+('test', 'fsdf', 1, 'rwer', 'dfasdasd', 4, NULL, 125434, 44, 5, 0, 4);
 
 -- --------------------------------------------------------
 
@@ -132,9 +135,9 @@ INSERT INTO `tbl_hotel` (`hotelId`, `name`, `locationId`, `address`, `descriptio
 CREATE TABLE `tbl_invoice` (
   `invoiceId` varchar(255) NOT NULL,
   `reservationId` varchar(255) NOT NULL,
-  `invoiceDate` date NOT NULL,
+  `createdAt` datetime NOT NULL,
   `totalPrice` double NOT NULL,
-  `paymentId` varchar(255) NOT NULL
+  `paymentId` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -147,7 +150,7 @@ CREATE TABLE `tbl_location` (
   `locationId` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `parentId` int(11) DEFAULT NULL,
-  `type` int(11) DEFAULT NULL
+  `type` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -244,10 +247,18 @@ CREATE TABLE `tbl_reservation` (
   `hotelId` varchar(255) NOT NULL,
   `checkIn` date NOT NULL,
   `checkOut` date NOT NULL,
-  `reserveDate` date NOT NULL,
+  `createdAt` datetime NOT NULL,
   `deposit` decimal(10,0) NOT NULL,
-  `status` varchar(255) NOT NULL
+  `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_reservation`
+--
+
+INSERT INTO `tbl_reservation` (`reservationId`, `customerId`, `hotelId`, `checkIn`, `checkOut`, `createdAt`, `deposit`, `status`) VALUES
+('192413c0-d721-414c-a634-d2154d7be332', '001201007756', 'test', '2024-10-23', '2024-10-24', '2024-10-20 17:59:49', 23180, 1),
+('b1c045a4-985d-41a2-acda-6e3b838bf316', '001201007756', 'H001', '2024-10-26', '2024-10-29', '2024-10-20 18:10:02', 149, 1);
 
 --
 -- Indexes for dumped tables
@@ -329,7 +340,7 @@ ALTER TABLE `tbl_facility`
 -- AUTO_INCREMENT for table `tbl_location`
 --
 ALTER TABLE `tbl_location`
-  MODIFY `locationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `locationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- Constraints for dumped tables
