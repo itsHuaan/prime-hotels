@@ -54,7 +54,7 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Room Available</th>
                                 <th scope="col">Price</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Rating</th>
                                 <th scope="col" colspan="2">Actions</th>
                             </tr>
                             </thead>
@@ -67,14 +67,7 @@
                                     <td>${item.description}</td>
                                     <td>${item.roomAvailable}</td>
                                     <td>${item.price}</td>
-                                    <td>
-                                        <c:if test="${item.status == 1}">
-                                            Active
-                                        </c:if>
-                                        <c:if test="${item.status == 0}">
-                                            Inactive
-                                        </c:if>
-                                    </td>
+                                    <td>${item.rating}</td>
                                     <td>
                                         <button
                                                 type="button"
@@ -188,8 +181,8 @@
                             class="form-control"
                             name="description"
                             placeholder="Description"
-                            style="height: 100px"
-                    ></textarea>
+                            style="height: 100px">
+                    </textarea>
                             <label for="description">Description</label>
                         </div>
                         <div class="form-floating mb-3">
@@ -222,7 +215,7 @@
                                     placeholder="Price"
                                     min="1"
                             />
-                            <label for="price">Price</label>
+                            <label for="price">Price ($)</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input
@@ -232,15 +225,9 @@
                                     value="0"
                                     placeholder="Discount"
                                     min="0"
+                                    max="100"
                             />
                             <label for="discount">Discount (%)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <select class="form-select" name="status">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                            <label for="status">Status</label>
                         </div>
                         <div class="form-floating mb-3">
                             <select
@@ -264,7 +251,7 @@
                         >
                             Close
                         </button>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -283,10 +270,8 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="sourcePage" value="hotelManagementPage">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="hotelId" name="hotelId" placeholder="Hotel ID">
-                            <label for="hotelId">Hotel ID</label>
-                        </div>
+                        <input type="hidden" class="form-control" id="hotelId" name="hotelId" placeholder="Hotel ID"
+                               readonly>
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Hotel Name">
                             <label for="name">Hotel Name</label>
@@ -323,19 +308,12 @@
                             <input type="number" step="0.01" class="form-control" id="price" name="price"
                                    placeholder="Price"
                                    min="1">
-                            <label for="price">Price</label>
+                            <label for="price">Price ($)</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="number" class="form-control" id="discount" name="discount" value="0"
-                                   placeholder="Discount" min="0">
+                                   placeholder="Discount" min="0" max="100">
                             <label for="discount">Discount (%)</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <select class="form-select" id="status" name="status">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                            <label for="status">Status</label>
                         </div>
                         <div class="form-floating mb-3">
                             <select class="form-select" id="facilityListId" name="facilityListId">
@@ -348,7 +326,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -366,7 +344,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to delete this hotel?</p>
+                        <p id="confirmation">Are you sure you want to delete this hotel?</p>
                         <p id="deleteHotelName" class="text-danger font-weight-bold"></p>
                         <input type="hidden" id="_hotelId" name="_hotelId" value="">
                         <input type="hidden" name="_sourcePage" value="hotelManagementPage">
@@ -389,21 +367,22 @@
 <jsp:include page="components/js_libraries.jsp"/>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        let addHotelModal = document.getElementById('addHotel');
+        addHotelModal.addEventListener('hidden.bs.modal', function () {
+            let form = addHotelModal.querySelector('form');
+            form.reset();
+        });
+
         let deleteHotelModal = document.getElementById('deleteHotel');
         deleteHotelModal.addEventListener('show.bs.modal', function (event) {
             let button = event.relatedTarget;
+            document.getElementById('confirmation').innerHTML = 'Are you sure you want to delete ' + button.getAttribute('data-name') + '?';
             document.getElementById('_hotelId').value = button.getAttribute('data-hotelId');
         });
-    });
 
-
-
-    document.addEventListener('DOMContentLoaded', function () {
         let editHotelModal = document.getElementById('editHotel');
-
         editHotelModal.addEventListener('show.bs.modal', function (event) {
             let button = event.relatedTarget;
-
             let hotelId = button.getAttribute('data-hotelId');
             let name = button.getAttribute('data-name');
             let locationId = button.getAttribute('data-locationId');
@@ -412,9 +391,7 @@
             let roomAvailable = button.getAttribute('data-roomAvailable');
             let price = button.getAttribute('data-price');
             let discount = button.getAttribute('data-discount');
-            let status = button.getAttribute('data-status');
             let facilityListId = button.getAttribute('data-facilityListId');
-
             document.getElementById('hotelId').value = hotelId;
             document.getElementById('name').value = name;
             document.getElementById('locationId').value = locationId;
@@ -423,10 +400,11 @@
             document.getElementById('roomAvailable').value = roomAvailable;
             document.getElementById('price').value = price;
             document.getElementById('discount').value = discount;
-            document.getElementById('status').value = status === "1" ? "1" : "0";
             document.getElementById('facilityListId').value = facilityListId;
+            document.getElementById('exampleModalLabel').innerHTML = 'Edit Hotel #' + hotelId + ' Details';
         });
     });
 </script>
+
 </body>
 </html>

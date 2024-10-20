@@ -46,8 +46,8 @@
             <%--                </div>--%>
             <%--            </div>--%>
             <a href="dashboard.jsp" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-            <a href="HotelManagementServlet" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Hotel
-                managament</a>
+            <a href="HotelManagementServlet" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Hotels</a>
+            <a href="ReservationManagementServlet" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Reservation</a>
         </div>
     </nav>
 </div>

@@ -19,6 +19,9 @@ public class SaveServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String sourcePage = request.getParameter("sourcePage");
+        if (sourcePage == null) {
+            return;
+        }
         if (sourcePage.equalsIgnoreCase("hotelManagementPage")) {
             HotelService hotelService = new HotelService();
             HotelMapper hotelMapper = new HotelMapper();
@@ -27,8 +30,10 @@ public class SaveServlet extends HttpServlet {
             }
             hotelService.save(hotelMapper.toDTO(hotelMapper.toEntity(getHotelFromRequest(request, response))));
             response.sendRedirect("HotelManagementServlet");
-        } else {
-            System.out.println("Nah bro");
+        }
+        if (sourcePage.equalsIgnoreCase("reservationManagementPage")) {
+
+            response.sendRedirect("ReservationManagementServlet");
         }
     }
 
@@ -44,12 +49,10 @@ public class SaveServlet extends HttpServlet {
         String description = request.getParameter("description");
         String address = request.getParameter("address");
         int roomAvailable = Integer.parseInt(request.getParameter("roomAvailable"));
-        String image = request.getParameter("image");
         double price = Double.parseDouble(request.getParameter("price"));
         int discount = Integer.parseInt(request.getParameter("discount"));
-        int status = Integer.parseInt(request.getParameter("status"));
         int facilityListId = Integer.parseInt(request.getParameter("facilityListId"));
-        hotel = new HotelModel(hotelId, hotelName, locationId, address, description, roomAvailable, null, price, discount, 5.0, status, facilityListId);
+        hotel = new HotelModel(hotelId, hotelName, locationId, address, description, roomAvailable, null, price, discount, 5.0, 1, facilityListId);
         return hotel;
     }
 }

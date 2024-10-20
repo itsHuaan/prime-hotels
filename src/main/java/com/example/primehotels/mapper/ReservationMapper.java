@@ -5,6 +5,8 @@ import com.example.primehotels.entity.ReservationEntity;
 import com.example.primehotels.model.ReservationModel;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @NoArgsConstructor
 public class ReservationMapper {
     public ReservationDTO toDTO(ReservationEntity reservationEntity) {
@@ -14,7 +16,7 @@ public class ReservationMapper {
                 .hotelId(reservationEntity.getHotelId())
                 .checkIn(reservationEntity.getCheckIn())
                 .checkOut(reservationEntity.getCheckOut())
-                .reserveDate(reservationEntity.getReserveDate())
+                .createdAt(reservationEntity.getCreatedAt().toLocalDateTime())
                 .deposit(reservationEntity.getDeposit())
                 .status(reservationEntity.getStatus())
                 .build();
@@ -26,7 +28,7 @@ public class ReservationMapper {
                 .hotelId(reservationModel.getHotelId())
                 .checkIn(new java.sql.Date(reservationModel.getCheckIn().getTime()))
                 .checkOut(new java.sql.Date(reservationModel.getCheckOut().getTime()))
-                .reserveDate(new java.sql.Date(reservationModel.getReserveDate().getTime()))
+                .createdAt(Timestamp.valueOf(reservationModel.getCreatedAt()))
                 .deposit(reservationModel.getDeposit())
                 .status(reservationModel.getStatus())
                 .build();
@@ -38,7 +40,7 @@ public class ReservationMapper {
                 .hotelId(reservationDTO.getHotelId())
                 .checkIn(reservationDTO.getCheckIn())
                 .checkOut(reservationDTO.getCheckOut())
-                .reserveDate(reservationDTO.getReserveDate())
+                .createdAt(reservationDTO.getCreatedAt())
                 .deposit(reservationDTO.getDeposit())
                 .status(reservationDTO.getStatus())
                 .build();

@@ -16,7 +16,7 @@ public class ReservationEntity {
     private String hotelId;
     private java.sql.Date checkIn;
     private java.sql.Date checkOut;
-    private java.sql.Date reserveDate;
+    private java.sql.Timestamp createdAt;
     private double deposit;
     private int status = 1;
 }

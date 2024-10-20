@@ -13,6 +13,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
@@ -38,7 +39,7 @@ public class ReserveServlet extends HttpServlet {
                 hotelId,
                 DateConverter.stringToDate(checkin),
                 DateConverter.stringToDate(checkout),
-                new Date(),
+                new Timestamp(System.currentTimeMillis()).toLocalDateTime(),
                 deposit,
                 1
         );

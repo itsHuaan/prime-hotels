@@ -25,7 +25,7 @@
             text-align: center;
         }
 
-        .information{
+        .information {
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
@@ -64,10 +64,10 @@
     <div class="information">
         <p>Your reservation ID: <strong>${reservation.reservationId}</strong></p>
         <p>Hotel: <strong>${hotel.name}</strong></p>
-        <p>Reserve Date: <strong>${reservation.reserveDate}</strong></p>
         <p>Check-in Date: <strong>${reservation.checkIn}</strong></p>
         <p>Check-out Date: <strong>${reservation.checkOut}</strong></p>
-        <p>Deposit Amount: <strong>${reservation.deposit}</strong></p>
+        <p>Deposit Amount: <strong>$${reservation.deposit}</strong></p>
+        <p>Reservation Date: <strong>${reservation.createdAt}</strong></p>
     </div>
     <p>Thank you for choosing us. We look forward to welcoming you!</p>
     <a href="HomepageServlet" class="button">Back to Home</a>

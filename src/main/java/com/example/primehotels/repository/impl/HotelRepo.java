@@ -100,6 +100,24 @@ public class HotelRepo implements IHotelRepo {
     }
 
     @Override
+    public List<HotelEntity> sortByRating() {
+        List<HotelEntity> list = new ArrayList<>();
+        try {
+            connection = databaseConnector.openConnection();
+            String sql = "select * from tbl_hotel where status = 1 order by rating desc";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                list.add(resultSetToEntity(resultSet));
+            }
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+
+    @Override
     public int save(HotelEntity hotelEntity) {
         boolean isExisting = getById(hotelEntity.getHotelId()) != null;
         if (isExisting){
@@ -119,9 +137,9 @@ public class HotelRepo implements IHotelRepo {
                 preparedStatement.setInt(10, hotelEntity.getStatus());
                 preparedStatement.setInt(11, hotelEntity.getFacilityListId());
                 preparedStatement.setString(12, hotelEntity.getHotelId());
-                int rowAffected = preparedStatement.executeUpdate();
-                if (rowAffected > 0) {
-                    return rowAffected;
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    return rowsAffected;
                 }
                 connection.close();
             } catch (SQLException e) {
@@ -144,9 +162,9 @@ public class HotelRepo implements IHotelRepo {
                 preparedStatement.setDouble(10, hotelEntity.getRating());
                 preparedStatement.setInt(11, hotelEntity.getStatus());
                 preparedStatement.setInt(12, hotelEntity.getFacilityListId());
-                int rowAffected = preparedStatement.executeUpdate();
-                if (rowAffected > 0) {
-                    return rowAffected;
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    return rowsAffected;
                 }
                 connection.close();
             } catch (SQLException e) {

@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 
 <head>
@@ -360,7 +361,7 @@
 </head>
 
 <body>
-<jsp:include page="static/components/header.jsp"/>
+<jsp:include page="components/header.jsp"/>
 <c:set var="discountedPrice" value="${hotel.price - (hotel.price * (hotel.discount / 100))}"/>
 <div class="container">
     <div class="header-container">
@@ -400,7 +401,11 @@
             </ul>
         </div>
         <div class="pricing">
-            <h2>$<span id="price-display">${hotel.price - (hotel.price * (hotel.discount/100))}</span> per night</h2>
+            <h2>$<span id="price-display"><fmt:formatNumber
+                    type="number"
+                    maxFractionDigits="2"
+                    minFractionDigits="2"
+                    value="${discountedPrice}"/></span> per night</h2>
             <form action="ReserveServlet?hotelId=${hotel.hotelId}" method="post">
                 <div class="price-details">
                     <div>
@@ -539,6 +544,9 @@
     function calculateTotal() {
         const checkinDate = new Date(document.getElementById("checkin").value);
         const checkoutDate = new Date(document.getElementById("checkout").value);
+        if (!checkinDate || !checkoutDate || isNaN(checkinDate) || isNaN(checkoutDate)) {
+            return;
+        }
         const timeDifference = checkoutDate - checkinDate;
         const nights = Math.max(0, Math.ceil(timeDifference / (1000 * 60 * 60 * 24)));
         document.getElementById("nights-display").innerText = nights;
@@ -552,18 +560,25 @@
         document.getElementById('deposit').value = deposit.toFixed(2);
     }
 
-    calculateTotal();
-
     function setDefaultDates() {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById("checkin").value = today;
-        document.getElementById("checkout").value = today;
-        calculateTotal();
+        document.addEventListener('DOMContentLoaded', function () {
+            let checkInDate = document.getElementById('checkin');
+            let checkOutDate = document.getElementById('checkout');
+            let today = new Date().toISOString().split('T')[0];
+            checkInDate.setAttribute('min', today);
+            checkInDate.addEventListener('change', function () {
+                let selectedCheckInDate = new Date(this.value);
+                let minCheckOutDate = new Date(selectedCheckInDate);
+                minCheckOutDate.setDate(minCheckOutDate.getDate() + 1);
+                checkOutDate.value = minCheckOutDate.toISOString().split('T')[0];
+                checkOutDate.setAttribute('min', minCheckOutDate.toISOString().split('T')[0]);
+                calculateTotal();
+            });
+            checkOutDate.addEventListener('change', calculateTotal);
+        });
     }
 
     setDefaultDates();
-
-
 </script>
 </body>
 

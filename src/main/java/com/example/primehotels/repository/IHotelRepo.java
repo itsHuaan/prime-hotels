@@ -10,4 +10,5 @@ public interface IHotelRepo extends IBaseRepo<HotelEntity, String>{
     List<HotelEntity> getByLocation(int locationId);
     List<String> getFacilities(String hotelId);
     HotelEntity updateRoomAvailable(String hotelId);
+    List<HotelEntity> sortByRating();
 }

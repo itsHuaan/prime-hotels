@@ -2,6 +2,8 @@ package com.example.primehotels.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -16,7 +18,7 @@ public class ReservationDTO {
     private String hotelId;
     private Date checkIn;
     private Date checkOut;
-    private Date reserveDate;
+    private LocalDateTime createdAt;
     private double deposit;
     private int status = 1;
 }
