@@ -1,7 +1,11 @@
 package com.example.primehotels.servlet;
+
 import com.example.primehotels.mapper.HotelMapper;
+import com.example.primehotels.mapper.ReservationMapper;
 import com.example.primehotels.model.HotelModel;
+import com.example.primehotels.model.ReservationModel;
 import com.example.primehotels.service.impl.HotelService;
+import com.example.primehotels.service.impl.ReservationService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -24,15 +28,19 @@ public class SaveServlet extends HttpServlet {
         }
         if (sourcePage.equalsIgnoreCase("hotelManagementPage")) {
             HotelService hotelService = new HotelService();
-            HotelMapper hotelMapper = new HotelMapper();
+            HotelMapper mapper = new HotelMapper();
             if (getHotelFromRequest(request, response) == null) {
                 return;
             }
-            hotelService.save(hotelMapper.toDTO(hotelMapper.toEntity(getHotelFromRequest(request, response))));
+            hotelService.save(mapper.toDTO(mapper.toEntity(getHotelFromRequest(request, response))));
             response.sendRedirect("HotelManagementServlet");
         }
         if (sourcePage.equalsIgnoreCase("reservationManagementPage")) {
-
+            ReservationService reservationService = new ReservationService();
+            ReservationMapper mapper = new ReservationMapper();
+            String checkIn = request.getParameter("checkIn");
+            String checkOut = request.getParameter("checkOut");
+            System.out.println(checkIn + "\n" + checkOut);
             response.sendRedirect("ReservationManagementServlet");
         }
     }
@@ -54,5 +62,18 @@ public class SaveServlet extends HttpServlet {
         int facilityListId = Integer.parseInt(request.getParameter("facilityListId"));
         hotel = new HotelModel(hotelId, hotelName, locationId, address, description, roomAvailable, null, price, discount, 5.0, 1, facilityListId);
         return hotel;
+    }
+
+    private ReservationModel getReservationFromRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ReservationModel reservation;
+        String reservationId = request.getParameter("reservationId");
+        if (reservationId == null || reservationId.isEmpty()) {
+            reservation = null;
+            return reservation;
+        }
+        String customerId = request.getParameter("reservationName");
+        String hotelId = request.getParameter("hotelId");
+
+        return null;
     }
 }

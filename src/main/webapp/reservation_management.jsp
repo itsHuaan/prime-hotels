@@ -15,7 +15,6 @@
     <meta content="" name="keywords">
     <meta content="" name="description">
 
-
     <jsp:include page="components/css_libraries.jsp"/>
 </head>
 <body>

@@ -2,6 +2,7 @@ package com.example.primehotels.entity;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -13,7 +14,7 @@ import java.util.Date;
 public class InvoiceEntity {
     private String invoiceId;
     private String reservationId;
-    private Date invoiceDate;
+    private java.sql.Timestamp createdAt;
     private double totalPrice;
     private String paymentId;
 }
