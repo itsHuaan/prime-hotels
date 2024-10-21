@@ -31,19 +31,22 @@
     <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
             <div class="col-12">
-                <form action="ReserveServlet" method="post">
-                    <div class="bg-secondary rounded h-100 p-4">
-                        <h6 class="mb-4">Hotel Reservation Form</h6>
+                <div class="card bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4">Hotel Reservation Form</h6>
+                    <form action="ReserveServlet" method="post">
                         <input type="hidden" name="sourcePage" value="adminSide">
+
                         <!-- Customer ID -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="customerId" name="customerId" placeholder="Customer ID">
+                            <input type="text" class="form-control" id="customerId" name="customerId"
+                                   placeholder="Customer ID">
                             <label for="customerId">Customer ID</label>
                         </div>
 
                         <!-- Customer Name -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="customerName" name="customerName" placeholder="Customer Name">
+                            <input type="text" class="form-control" id="customerName" name="customerName"
+                                   placeholder="Customer Name">
                             <label for="customerName">Customer Name</label>
                         </div>
 
@@ -66,34 +69,45 @@
                             <select class="form-select" id="hotelSelect" name="hodelId" aria-label="Select Hotel">
                                 <option selected>Select a hotel</option>
                                 <c:forEach var="hotel" items="${hotels}">
-                                <option value="${hotel.hotelId}">${hotel.name} - ${hotel.address}</option>
+                                    <option value="${hotel.hotelId}"
+                                            data-price="${hotel.price}"
+                                            data-discount="${hotel.discount}">
+                                            ${hotel.name} - ${hotel.address}
+                                    </option>
                                 </c:forEach>
                             </select>
                             <label for="hotelSelect">Hotel</label>
                         </div>
 
-                        <!-- Check-in Date -->
-                        <div class="form-floating mb-3">
-                            <input type="date" class="form-control datepicker" id="checkIn" name="checkIn" placeholder="Check-in Date">
-                            <label for="checkIn">Check-in Date</label>
-                        </div>
-
-                        <!-- Check-out Date -->
-                        <div class="form-floating mb-3">
-                            <input type="date" class="form-control datepicker" id="checkOut" name="checkOut" placeholder="Check-out Date">
-                            <label for="checkOut">Check-out Date</label>
+                        <!-- Check-in and Check-out Dates in a Single Row -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control datepicker" id="checkIn" name="checkIn"
+                                           placeholder="Check-in Date">
+                                    <label for="checkIn">Check-in Date</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control datepicker" id="checkOut" name="checkOut"
+                                           placeholder="Check-out Date">
+                                    <label for="checkOut">Check-out Date</label>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Deposit -->
                         <div class="form-floating mb-3">
-                            <input type="number" class="form-control" id="deposit" name="deposit" placeholder="Deposit Amount" min="0">
+                            <input type="number" class="form-control" id="deposit" name="deposit"
+                                   placeholder="Deposit Amount" min="0">
                             <label for="deposit">Deposit Amount ($)</label>
                         </div>
 
-                        <!-- Full-width button -->
+                        <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary w-100 mt-4">Submit Reservation</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -125,6 +139,41 @@
         });
     });
 
+    document.addEventListener("DOMContentLoaded", function() {
+        const hotelSelect = document.getElementById("hotelSelect");
+        const depositInput = document.getElementById("deposit");
+        const checkInInput = document.getElementById("checkIn");
+        const checkOutInput = document.getElementById("checkOut");
+        function calculateDaysDifference(checkIn, checkOut) {
+            const checkInDate = new Date(checkIn);
+            const checkOutDate = new Date(checkOut);
+            const timeDiff = checkOutDate - checkInDate;
+            return Math.ceil(timeDiff / (1000 * 3600 * 24));
+        }
+        function calculateDeposit() {
+            const selectedOption = hotelSelect.options[hotelSelect.selectedIndex];
+            const price = selectedOption.getAttribute("data-price");
+            const discount = selectedOption.getAttribute("data-discount");
+            const discountedPrice = price - (price * discount);
+            const checkIn = checkInInput.value;
+            const checkOut = checkOutInput.value;
+            if (discountedPrice && checkIn && checkOut) {
+                const days = calculateDaysDifference(checkIn, checkOut);
+                if (days > 0) {
+                    const totalPrice = discountedPrice * days;
+                    const deposit = totalPrice * 0.30;
+                    depositInput.value = deposit.toFixed(2);
+                } else {
+                    depositInput.value = "";
+                }
+            } else {
+                depositInput.value = "";
+            }
+        }
+        hotelSelect.addEventListener("change", calculateDeposit);
+        checkInInput.addEventListener("change", calculateDeposit);
+        checkOutInput.addEventListener("change", calculateDeposit);
+    });
 </script>
 </body>
 </html>

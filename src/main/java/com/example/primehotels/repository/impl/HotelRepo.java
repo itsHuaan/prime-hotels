@@ -38,7 +38,7 @@ public class HotelRepo implements IHotelRepo {
         HotelEntity hotelEntity = null;
         try {
             connection = databaseConnector.openConnection();
-            String query = "select * from tbl_hotel where hotelId = ?";
+            String query = "select * from tbl_hotel where hotelId = ? and status = 1";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -57,7 +57,7 @@ public class HotelRepo implements IHotelRepo {
         List<HotelEntity> list = new ArrayList<>();
         try {
             connection = databaseConnector.openConnection();
-            String sql = "select * from tbl_hotel where locationId = ?";
+            String sql = "select * from tbl_hotel where locationId = ? and status = 1";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, locationId);
             ResultSet resultSet = preparedStatement.executeQuery();

@@ -58,7 +58,6 @@ public class SaveServlet extends HttpServlet {
                 return;
             }
 //            invoiceService.save(mapper.toDTO(mapper.toEntity(getInvoiceFromRequest(request, response))));
-            System.out.println(getInvoiceFromRequest(request, response));
             response.sendRedirect("ReservationManagementServlet");
         }
     }

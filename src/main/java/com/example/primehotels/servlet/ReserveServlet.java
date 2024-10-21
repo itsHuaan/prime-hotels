@@ -1,11 +1,13 @@
 package com.example.primehotels.servlet;
 
+import com.example.primehotels.dto.CustomerDTO;
 import com.example.primehotels.dto.HotelDTO;
 import com.example.primehotels.dto.ReservationDTO;
 import com.example.primehotels.entity.ReservationEntity;
 import com.example.primehotels.mapper.ReservationMapper;
 import com.example.primehotels.model.ReservationModel;
 import com.example.primehotels.repository.impl.ReservationRepo;
+import com.example.primehotels.service.impl.CustomerService;
 import com.example.primehotels.service.impl.HotelService;
 import com.example.primehotels.util.DateConverter;
 
@@ -52,6 +54,7 @@ public class ReserveServlet extends HttpServlet {
             request.setAttribute("reservation", mapper.toDTO(mapper.toEntity(reservationModel)));
             request.getRequestDispatcher("/booking_success.jsp").forward(request, response);
         } else {
+            CustomerService customerService = new CustomerService();
             String reservationId = UUID.randomUUID().toString();
             String customerId = request.getParameter("customerId");
             String hotelId = request.getParameter("hodelId");
@@ -68,7 +71,6 @@ public class ReserveServlet extends HttpServlet {
                     deposit,
                     1
             );
-            System.out.println(reservationModel);
             response.sendRedirect("ReservationManagementServlet");
         }
     }

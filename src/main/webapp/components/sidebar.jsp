@@ -24,7 +24,8 @@
         <div class="navbar-nav w-100">
             <a href="AdminReserve" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Make A Reservation</a>
             <a href="HotelManagementServlet" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Hotels</a>
-            <a href="ReservationManagementServlet" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Reservation</a>
+            <a href="ReservationManagementServlet" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Reservations</a>
+            <a href="CustomerManagementServlet" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Customers</a>
         </div>
     </nav>
 </div>
