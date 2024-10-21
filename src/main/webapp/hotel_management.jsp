@@ -45,7 +45,7 @@
                         </button>
                     </div>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table id="hotelTable" class="table">
                             <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -55,7 +55,7 @@
                                 <th scope="col">Room Available</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Rating</th>
-                                <th scope="col" colspan="2">Actions</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -69,36 +69,47 @@
                                     <td>&#36;${item.price}</td>
                                     <td>${item.rating}</td>
                                     <td>
-                                        <button
-                                                type="button"
-                                                class="btn btn-info"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editHotel"
-                                                data-hotelId="${item.hotelId}"
-                                                data-name="${item.name}"
-                                                data-locationId="${item.locationId}"
-                                                data-address="${item.address}"
-                                                data-description="${item.description}"
-                                                data-roomAvailable="${item.roomAvailable}"
-                                                data-image="${item.image}"
-                                                data-price="${item.price}"
-                                                data-discount="${item.discount}"
-                                                data-status="${item.status}"
-                                                data-facilityListId="${item.facilityListId}"
-                                        >
-                                            Edit
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button
-                                                type="button"
-                                                class="btn btn-primary"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteHotel"
-                                                data-hotelId="${item.hotelId}"
-                                                data-name="${item.name}">
-                                            Delete
-                                        </button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li>
+                                                    <button
+                                                            type="button"
+                                                            class="dropdown-item btn btn-info"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editHotel"
+                                                            data-hotelId="${item.hotelId}"
+                                                            data-name="${item.name}"
+                                                            data-locationId="${item.locationId}"
+                                                            data-address="${item.address}"
+                                                            data-description="${item.description}"
+                                                            data-roomAvailable="${item.roomAvailable}"
+                                                            data-image="${item.image}"
+                                                            data-price="${item.price}"
+                                                            data-discount="${item.discount}"
+                                                            data-status="${item.status}"
+                                                            data-facilityListId="${item.facilityListId}"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button
+                                                            type="button"
+                                                            class="dropdown-item btn btn-primary"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteHotel"
+                                                            data-hotelId="${item.hotelId}"
+                                                            data-name="${item.name}">
+                                                        Delete
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -366,6 +377,16 @@
 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 <jsp:include page="components/js_libraries.jsp"/>
 <script>
+    $(document).ready(function () {
+        $('#hotelTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "lengthChange": true,
+            "pageLength": 10
+        });
+    });
     document.addEventListener('DOMContentLoaded', function () {
         let addHotelModal = document.getElementById('addHotel');
         addHotelModal.addEventListener('hidden.bs.modal', function () {

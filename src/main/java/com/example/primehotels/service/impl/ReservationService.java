@@ -12,6 +12,7 @@ import java.util.List;
 public class ReservationService implements IReservationService {
     ReservationRepo reservationRepo = new ReservationRepo();
     ReservationMapper mapper = new ReservationMapper();
+
     @Override
     public List<ReservationDTO> getAll() {
         List<ReservationDTO> reservations = new ArrayList<>();
@@ -24,12 +25,12 @@ public class ReservationService implements IReservationService {
 
     @Override
     public ReservationDTO getById(String id) {
-        return null;
+        return mapper.toDTO(reservationRepo.getById(id));
     }
 
     @Override
     public int save(ReservationDTO reservationDTO) {
-        return 0;
+        return reservationRepo.save(mapper.toEntity(mapper.toModel(reservationDTO)));
     }
 
     @Override

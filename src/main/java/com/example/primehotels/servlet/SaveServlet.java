@@ -1,10 +1,13 @@
 package com.example.primehotels.servlet;
 
 import com.example.primehotels.mapper.HotelMapper;
+import com.example.primehotels.mapper.InvoiceMapper;
 import com.example.primehotels.mapper.ReservationMapper;
 import com.example.primehotels.model.HotelModel;
+import com.example.primehotels.model.InvoiceModel;
 import com.example.primehotels.model.ReservationModel;
 import com.example.primehotels.service.impl.HotelService;
+import com.example.primehotels.service.impl.InvoiceService;
 import com.example.primehotels.service.impl.ReservationService;
 import com.example.primehotels.util.DateConverter;
 
@@ -41,21 +44,29 @@ public class SaveServlet extends HttpServlet {
         if (sourcePage.equalsIgnoreCase("reservationManagementPage")) {
             ReservationService reservationService = new ReservationService();
             ReservationMapper mapper = new ReservationMapper();
-            System.out.println(getReservationFromRequest(request, response));
+            if (getReservationFromRequest(request, response) == null) {
+                return;
+            }
+            reservationService.save(mapper.toDTO(mapper.toEntity(getReservationFromRequest(request, response))));
             response.sendRedirect("ReservationManagementServlet");
         }
 
         if (sourcePage.equalsIgnoreCase("checkOut")) {
-            String reservationId = request.getParameter("reservationId");
-            System.out.println("Check out for " + reservationId);
+            InvoiceService invoiceService = new InvoiceService();
+            InvoiceMapper mapper = new InvoiceMapper();
+            if (getInvoiceFromRequest(request, response) == null) {
+                return;
+            }
+//            invoiceService.save(mapper.toDTO(mapper.toEntity(getInvoiceFromRequest(request, response))));
+            System.out.println(getInvoiceFromRequest(request, response));
+            response.sendRedirect("ReservationManagementServlet");
         }
     }
 
     private HotelModel getHotelFromRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HotelModel hotel;
+        HotelModel hotel = null;
         String hotelId = request.getParameter("hotelId");
         if (hotelId == null || hotelId.isEmpty()) {
-            hotel = null;
             return hotel;
         }
         String hotelName = request.getParameter("name");
@@ -70,10 +81,9 @@ public class SaveServlet extends HttpServlet {
     }
 
     private ReservationModel getReservationFromRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ReservationModel reservation;
+        ReservationModel reservation = null;
         String reservationId = request.getParameter("reservationId");
         if (reservationId == null || reservationId.isEmpty()) {
-            reservation = null;
             return reservation;
         }
         String customerId = request.getParameter("customerId");
@@ -85,7 +95,14 @@ public class SaveServlet extends HttpServlet {
         String createdAtStr = request.getParameter("createdAt");
         LocalDateTime createdAt = LocalDateTime.parse(createdAtStr);
         double depositAmount = Double.parseDouble(request.getParameter("deposit"));
-        int status = Integer.parseInt(request.getParameter("status"));
+        int status = Integer.parseInt(request.getParameter("_status"));
         return new ReservationModel(reservationId, customerId, hotelId, checkIn, checkOut, createdAt, depositAmount, status);
+    }
+
+    private InvoiceModel getInvoiceFromRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        InvoiceModel invoice = null;
+        String reservationId = request.getParameter("_reservationId");
+        double deposit = Double.parseDouble(request.getParameter("_deposit"));
+        return new InvoiceModel();
     }
 }

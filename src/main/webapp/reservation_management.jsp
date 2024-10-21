@@ -36,7 +36,7 @@
                         <h6>Reservation Management</h6>
                     </div>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table id="reservationTable" class="table">
                             <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -47,13 +47,13 @@
                                 <th scope="col">Deposit</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Created At</th>
-                                <th scope="col" colspan="3">Actions</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="item" items="${reservations}" varStatus="status">
+                            <c:forEach var="item" items="${reservations}" varStatus="_status">
                                 <tr>
-                                    <th scope="row">${status.index + 1}</th>
+                                    <th scope="row">${_status.index + 1}</th>
                                     <td>${item.customerId}</td>
                                     <td>${item.hotelId}</td>
                                     <td>${item.checkIn}</td>
@@ -64,7 +64,7 @@
                                             Reserved
                                         </c:if>
                                         <c:if test="${item.status == 2}">
-                                            Checked Out
+                                            Paid
                                         </c:if>
                                         <c:if test="${item.status == 3}">
                                             Canceled
@@ -72,41 +72,49 @@
                                     </td>
                                     <td>${item.createdAt}</td>
                                     <td>
-                                        <button
-                                                type="button"
-                                                class="btn btn-info"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editReservation"
-                                                data-reservationId="${item.reservationId}"
-                                                data-customerId="${item.customerId}"
-                                                data-hotelId="${item.hotelId}"
-                                                data-checkIn="${item.checkIn}"
-                                                data-checkOut="${item.checkOut}"
-                                                data-createdAt="${item.createdAt}"
-                                                data-deposit="${item.deposit}"
-                                                data-status="${item.status}">
-                                            Edit
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button
-                                                type="button"
-                                                class="btn btn-light" data-bs-toggle="modal"
-                                                data-bs-target="#checkOutModal"
-                                                data-reservationId="${item.reservationId}"
-                                                data-deposit="${item.deposit}">
-                                            Check Out
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button
-                                                type="button"
-                                                class="btn btn-primary"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteReservation"
-                                                data-reservationId="${item.reservationId}">
-                                            Delete
-                                        </button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li>
+                                                    <button type="button"
+                                                            class="dropdown-item btn btn-info"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editReservation"
+                                                            data-reservationId="${item.reservationId}"
+                                                            data-customerId="${item.customerId}"
+                                                            data-hotelId="${item.hotelId}"
+                                                            data-checkIn="${item.checkIn}"
+                                                            data-checkOut="${item.checkOut}"
+                                                            data-createdAt="${item.createdAt}"
+                                                            data-deposit="${item.deposit}" data-status="${item.status}">
+                                                        Edit
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button type="button"
+                                                            class="dropdown-item btn btn-light"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#checkOutModal"
+                                                            data-reservationId="${item.reservationId}"
+                                                            data-deposit="${item.deposit}">
+                                                        Check Out
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button type="button"
+                                                            class="dropdown-item btn btn-primary"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteReservation"
+                                                            data-reservationId="${item.reservationId}">
+                                                        Delete
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -201,9 +209,9 @@
                             <label for="deposit">Deposit</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="status" id="status">
+                            <select class="form-select" name="_status" id="status">
                                 <option value="1">Reserved</option>
-                                <option value="2">Checked Out</option>
+                                <option value="2">Paid</option>
                                 <option value="3">Canceled</option>
                             </select>
                             <label for="status">Status</label>
@@ -284,6 +292,16 @@
 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 <jsp:include page="components/js_libraries.jsp"/>
 <script>
+    $(document).ready(function () {
+        $('#reservationTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "lengthChange": true,
+            "pageLength": 10
+        });
+    });
 
     document.addEventListener('DOMContentLoaded', function () {
         let checkOutModal = document.getElementById('checkOutModal');

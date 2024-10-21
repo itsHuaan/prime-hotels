@@ -29,25 +29,47 @@ public class ReserveServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String hotelId = request.getParameter("hotelId");
-        String checkin = request.getParameter("checkin");
-        String checkout = request.getParameter("checkout");
-        double deposit = Double.parseDouble(request.getParameter("deposit"));
-        ReservationModel reservationModel = new ReservationModel(
-                UUID.randomUUID().toString(),
-                "001201007756",
-                hotelId,
-                DateConverter.stringToDate(checkin),
-                DateConverter.stringToDate(checkout),
-                new Timestamp(System.currentTimeMillis()).toLocalDateTime(),
-                deposit,
-                1
-        );
-        HotelService hotelService = new HotelService();
-        HotelDTO hotelDTO = hotelService.getById(reservationModel.getHotelId());
-        reservationRepo.save(mapper.toEntity(reservationModel));
-        request.setAttribute("hotel", hotelDTO);
-        request.setAttribute("reservation", mapper.toDTO(mapper.toEntity(reservationModel)));
-        request.getRequestDispatcher("/booking_success.jsp").forward(request, response);
+        String sourcePage = request.getParameter("sourcePage");
+        if (sourcePage.equalsIgnoreCase("clientSide")) {
+            String hotelId = request.getParameter("hotelId");
+            String checkin = request.getParameter("checkin");
+            String checkout = request.getParameter("checkout");
+            double deposit = Double.parseDouble(request.getParameter("deposit"));
+            ReservationModel reservationModel = new ReservationModel(
+                    UUID.randomUUID().toString(),
+                    "001201007756",
+                    hotelId,
+                    DateConverter.stringToDate(checkin),
+                    DateConverter.stringToDate(checkout),
+                    new Timestamp(System.currentTimeMillis()).toLocalDateTime(),
+                    deposit,
+                    1
+            );
+            HotelService hotelService = new HotelService();
+            HotelDTO hotelDTO = hotelService.getById(reservationModel.getHotelId());
+            reservationRepo.save(mapper.toEntity(reservationModel));
+            request.setAttribute("hotel", hotelDTO);
+            request.setAttribute("reservation", mapper.toDTO(mapper.toEntity(reservationModel)));
+            request.getRequestDispatcher("/booking_success.jsp").forward(request, response);
+        } else {
+            String reservationId = UUID.randomUUID().toString();
+            String customerId = request.getParameter("customerId");
+            String hotelId = request.getParameter("hodelId");
+            String checkIn = request.getParameter("checkIn");
+            String checkOut = request.getParameter("checkOut");
+            double deposit = Double.parseDouble(request.getParameter("deposit"));
+            ReservationModel reservationModel = new ReservationModel(
+                    reservationId,
+                    customerId,
+                    hotelId,
+                    DateConverter.stringToDate(checkIn),
+                    DateConverter.stringToDate(checkOut),
+                    new Timestamp(System.currentTimeMillis()).toLocalDateTime(),
+                    deposit,
+                    1
+            );
+            System.out.println(reservationModel);
+            response.sendRedirect("ReservationManagementServlet");
+        }
     }
 }

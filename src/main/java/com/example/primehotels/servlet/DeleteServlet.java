@@ -3,6 +3,7 @@ package com.example.primehotels.servlet;
 import com.example.primehotels.dto.HotelDTO;
 import com.example.primehotels.mapper.HotelMapper;
 import com.example.primehotels.service.impl.HotelService;
+import com.example.primehotels.service.impl.ReservationService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -29,7 +30,12 @@ public class DeleteServlet extends HttpServlet {
             response.sendRedirect("HotelManagementServlet");
         }
         if (sourcePage.equalsIgnoreCase("reservationManagementPage")) {
-            System.out.println(sourcePage);
+            ReservationService reservationService = new ReservationService();
+            String reservationId = request.getParameter("_reservationId");
+            if (reservationId == null || reservationId.isEmpty()) {
+                return;
+            }
+            reservationService.delete(reservationId);
             response.sendRedirect("ReservationManagementServlet");
         }
     }

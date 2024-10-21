@@ -1,8 +1,7 @@
 package com.example.primehotels.repository.impl;
 
-import com.example.primehotels.entity.ReservationEntity;
-import com.example.primehotels.repository.IReservationRepo;
-import com.example.primehotels.util.ApiResponse;
+import com.example.primehotels.entity.InvoiceEntity;
+import com.example.primehotels.repository.IInvoiceRepo;
 import com.example.primehotels.util.DatabaseConnector;
 
 import java.sql.Connection;
@@ -12,21 +11,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationRepo implements IReservationRepo {
+public class InvoiceRepo implements IInvoiceRepo {
     DatabaseConnector databaseConnector = new DatabaseConnector();
     Connection connection = null;
 
     @Override
-    public List<ReservationEntity> getAll() {
-        List<ReservationEntity> list = new ArrayList<>();
+    public List<InvoiceEntity> getAll() {
+        List<InvoiceEntity> list = new ArrayList<>();
         try {
             connection = databaseConnector.openConnection();
-            String query = "select * from tbl_reservation where status <> 4";
+            String query = "select * from tbl_invoice";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 list.add(resultSetToEntity(resultSet));
             }
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -34,40 +34,34 @@ public class ReservationRepo implements IReservationRepo {
     }
 
     @Override
-    public ReservationEntity getById(String id) {
-        ReservationEntity reservationEntity = null;
+    public InvoiceEntity getById(String id) {
+        InvoiceEntity invoiceEntity = null;
         try {
             connection = databaseConnector.openConnection();
-            String query = "select * from tbl_reservation where reservationId = ?";
+            String query = "select * from tbl_invoice where invoiceId = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                reservationEntity = resultSetToEntity(resultSet);
+                invoiceEntity = resultSetToEntity(resultSet);
             }
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return reservationEntity;
+        return invoiceEntity;
     }
 
     @Override
-    public int save(ReservationEntity reservationEntity) {
-        boolean isExisting = getById(reservationEntity.getReservationId()) != null;
+    public int save(InvoiceEntity invoiceEntity) {
+        boolean isExisting = getById(invoiceEntity.getInvoiceId()) != null;
         if (isExisting) {
             try {
                 connection = databaseConnector.openConnection();
-                String query = "update tbl_reservation set customerId = ?, hotelId = ?, checkIn = ?, checkOut = ?, createdAt = ?, deposit = ?, status = ? where reservationId = ?";
+                String query = "update tbl_invoice set totalPrice = ? where invoiceId = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setString(1, reservationEntity.getCustomerId());
-                preparedStatement.setString(2, reservationEntity.getHotelId());
-                preparedStatement.setDate(3, reservationEntity.getCheckIn());
-                preparedStatement.setDate(4, reservationEntity.getCheckOut());
-                preparedStatement.setTimestamp(5, reservationEntity.getCreatedAt());
-                preparedStatement.setDouble(6, reservationEntity.getDeposit());
-                preparedStatement.setInt(7, reservationEntity.getStatus());
-                preparedStatement.setString(8, reservationEntity.getReservationId());
+                preparedStatement.setDouble(1, invoiceEntity.getTotalPrice());
+                preparedStatement.setString(2, invoiceEntity.getInvoiceId());
                 int rowsAffected = preparedStatement.executeUpdate();
                 if (rowsAffected > 0) {
                     return rowsAffected;
@@ -79,16 +73,13 @@ public class ReservationRepo implements IReservationRepo {
         } else {
             try {
                 connection = databaseConnector.openConnection();
-                String query = "insert into tbl_reservation value (?, ?, ?, ?, ?, ?, ?, ?)";
+                String query = "insert into tbl_invoice values(?, ?, ?, ?, ?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setString(1, reservationEntity.getReservationId());
-                preparedStatement.setString(2, reservationEntity.getCustomerId());
-                preparedStatement.setString(3, reservationEntity.getHotelId());
-                preparedStatement.setDate(4, reservationEntity.getCheckIn());
-                preparedStatement.setDate(5, reservationEntity.getCheckOut());
-                preparedStatement.setTimestamp(6, reservationEntity.getCreatedAt());
-                preparedStatement.setDouble(7, reservationEntity.getDeposit());
-                preparedStatement.setInt(8, reservationEntity.getStatus());
+                preparedStatement.setString(1, invoiceEntity.getInvoiceId());
+                preparedStatement.setString(2, invoiceEntity.getReservationId());
+                preparedStatement.setTimestamp(3, invoiceEntity.getCreatedAt());
+                preparedStatement.setDouble(4, invoiceEntity.getTotalPrice());
+                preparedStatement.setString(5, invoiceEntity.getPaymentId());
                 int rowsAffected = preparedStatement.executeUpdate();
                 if (rowsAffected > 0) {
                     return rowsAffected;
@@ -105,13 +96,14 @@ public class ReservationRepo implements IReservationRepo {
     public int delete(String id) {
         try {
             connection = databaseConnector.openConnection();
-            String query = "update tbl_reservation set status = 4 where reservationId = ?";
+            String query = "delete from tbl_invoice where invoiceId = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, id);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 return rowsAffected;
             }
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -119,16 +111,13 @@ public class ReservationRepo implements IReservationRepo {
     }
 
     @Override
-    public ReservationEntity resultSetToEntity(ResultSet resultSet) throws SQLException {
-        return new ReservationEntity(
+    public InvoiceEntity resultSetToEntity(ResultSet resultSet) throws SQLException {
+        return new InvoiceEntity(
                 resultSet.getString(1),
                 resultSet.getString(2),
-                resultSet.getString(3),
-                resultSet.getDate(4),
-                resultSet.getDate(5),
-                resultSet.getTimestamp(6),
-                resultSet.getDouble(7),
-                resultSet.getInt(8)
+                resultSet.getTimestamp(3),
+                resultSet.getDouble(4),
+                resultSet.getString(5)
         );
     }
 }

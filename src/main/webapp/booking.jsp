@@ -407,6 +407,7 @@
                     minFractionDigits="2"
                     value="${discountedPrice}"/></span> per night</h2>
             <form action="ReserveServlet?hotelId=${hotel.hotelId}" method="post">
+                <input type="hidden" name="sourcePage" value="clientSide">
                 <div class="price-details">
                     <div>
                         <p>CHECK-IN</p>
